@@ -9,10 +9,10 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
         CorsRules: [
           {
             AllowedHeaders: ['*'],
-            AllowedMethods: ['HEAD', 'GET', 'PUT', 'POST', 'DELETE'],
+            AllowedMethods: ['GET', 'HEAD', 'PUT', 'POST', 'DELETE'],
             AllowedOrigins: ['*'],
-            ExposedHeaders: [],
-            MaxAge: 3600,
+            ExposeHeaders: ['x-amz-server-side-encryption', 'x-amz-request-id', 'x-amz-id-2', 'ETag', 'x-amz-meta-foo'],
+            MaxAgeSeconds: 3000,
           },
         ],
       },
