@@ -9,6 +9,7 @@ const lambda: NonNullable<AWS['functions']>[0] = {
         method: 'any',
         path: '/image-processor/{proxy+}',
         cors: true,
+        private: true,
       },
     },
   ],

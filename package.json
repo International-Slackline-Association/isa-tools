@@ -8,7 +8,7 @@
     "checkTs": "tsc --noEmit",
     "package": "serverless package",
     "deploy": "serverless deploy --verbose",
-    "deploy:api": "serverless deploy function -f imageProcessorApi"
+    "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi"
   },
   "engines": {
     "node": ">=16.13.2",

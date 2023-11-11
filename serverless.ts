@@ -4,6 +4,7 @@ import imageProcessorApi from '@functions/image-processor-api/lambda';
 import logger from '@functions/logger/lambda';
 
 import { cloudwatchResources } from 'infrastructure/cloudwatch';
+import { s3Resources } from 'infrastructure/s3';
 
 const serverlessConfiguration: AWS = {
   service: 'isa-documents',
@@ -18,12 +19,21 @@ const serverlessConfiguration: AWS = {
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
-      binaryMediaTypes: ['*/*', 'image/*', 'image/jpeg', 'image/png', 'image/webp'],
+      binaryMediaTypes: ['image/jpeg', 'image/png', 'image/webp'],
+      apiKeys: [
+        {
+          name: 'ImageProcessorApiKey',
+          description: 'API key for the image processor API',
+          enabled: true,
+        },
+      ],
     },
+
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       APPLICATION_LOG_GROUP_NAME: { Ref: 'ApplicationLogsGroup' },
+      IMAGE_PROCESSING_INPUT_S3_BUCKET: { Ref: 'ImageProcessingInputS3Bucket' },
     },
     iam: {
       role: {
@@ -40,7 +50,16 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: ['s3:GetObject', 's3:PutObject'],
-            Resource: ['arn:aws:s3:::isa-image-processing-buffer/*'],
+            Resource: [
+              {
+                'Fn::Join': ['', [{ 'Fn::GetAtt': ['ImageProcessingInputS3Bucket', 'Arn'] }, '*']],
+              },
+            ],
+          },
+          {
+            Effect: 'Allow',
+            Action: ['s3:PutObject'],
+            Resource: ['${cf:slackmap-prod.SlackMapImagesS3BucketArn}/public/*'],
           },
         ],
       },
@@ -87,6 +106,14 @@ const serverlessConfiguration: AWS = {
   resources: {
     Resources: {
       ...cloudwatchResources,
+      ...s3Resources,
+    },
+    Outputs: {
+      ImageProcessingInputS3Bucket: {
+        Value: {
+          Ref: 'ImageProcessingInputS3Bucket',
+        },
+      },
     },
   },
 };
