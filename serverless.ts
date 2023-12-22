@@ -61,6 +61,11 @@ const serverlessConfiguration: AWS = {
             Action: ['s3:PutObject'],
             Resource: ['${cf:slackmap-prod.SlackMapImagesS3BucketArn}/public/*'],
           },
+          {
+            Effect: 'Allow',
+            Action: ['s3:PutObject'],
+            Resource: ['${cf:isa-users-prod.ISAUsersImagesS3BucketArn}/public/*'],
+          },
         ],
       },
     },
