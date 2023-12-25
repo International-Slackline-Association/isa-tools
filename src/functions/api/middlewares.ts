@@ -1,9 +1,8 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import { logger } from 'core/utils/logger';
+import { getCurrentInvoke } from '@vendia/serverless-express';
 
-export const injectCommonlyUsedHeadersMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
-  next();
-};
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { logger } from 'core/utils/logger';
 
 export const errorMiddleware: ErrorRequestHandler = async (error, req, res, next) => {
   if (!error) {
@@ -25,5 +24,6 @@ export const errorMiddleware: ErrorRequestHandler = async (error, req, res, next
 };
 
 export const notFoundMiddleware = (_req: Request, res: Response, _next: NextFunction) => {
-  res.status(404).json({ message: '404 Not Found' });
+  console.log(_req.path);
+  res.status(404).json({ message: `${_req.path} Not Found` });
 };

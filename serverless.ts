@@ -5,6 +5,8 @@ import logger from '@functions/logger/lambda';
 
 import { cloudwatchResources } from 'infrastructure/cloudwatch';
 import { s3Resources } from 'infrastructure/s3';
+import { backupResources } from 'infrastructure/backup';
+import { dynamodbResources } from 'infrastructure/dynamodb';
 
 const serverlessConfiguration: AWS = {
   service: 'isa-documents',
@@ -12,7 +14,7 @@ const serverlessConfiguration: AWS = {
   plugins: ['serverless-plugin-log-subscription', 'serverless-esbuild', 'serverless-prune-plugin'],
   provider: {
     name: 'aws',
-    runtime: 'nodejs18.x',
+    runtime: 'nodejs20.x',
     region: 'eu-central-1',
     profile: '${env:AWS_PROFILE}',
     stage: 'prod',
@@ -91,7 +93,7 @@ const serverlessConfiguration: AWS = {
       minify: false,
       sourcemap: true,
       exclude: ['aws-sdk', 'sharp'],
-      target: 'node18',
+      target: 'node20',
       define: { 'require.resolve': undefined },
       platform: 'node',
       concurrency: 10,
@@ -112,6 +114,8 @@ const serverlessConfiguration: AWS = {
     Resources: {
       ...cloudwatchResources,
       ...s3Resources,
+      ...backupResources,
+      ...dynamodbResources,
     },
     Outputs: {
       ImageProcessingInputS3Bucket: {

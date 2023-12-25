@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
-    "lib": ["ES2021"],
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "ES2021",
@@ -11,14 +10,11 @@
     "resolveJsonModule": true,
     "removeComments": true,
     "skipLibCheck": true,
-    "strict": true,
-    "useUnknownInCatchVariables": true,
     "types": ["node"],
-    "allowJs": false,
-    "noImplicitAny": true
+    "strict": true,
   },
   "include": ["src/**/*.ts", "serverless.ts", "misc/scripts/**/*.ts"],
-  "exclude": ["node_modules/**/*", ".serverless/**/*", ".webpack/**/*", "_warmup/**/*", ".vscode/**/*"],
+  "exclude": ["node_modules/**/*",],
   "ts-node": {
     "require": ["tsconfig-paths/register"],
     "files": true
