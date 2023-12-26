@@ -85,5 +85,5 @@ const generateVerificationUrl = (hash?: string, token?: string) => {
   if (token) {
     return `${base}?token=${token}`;
   }
-  return undefined;
+  throw new Error('Invalid verification url');
 };

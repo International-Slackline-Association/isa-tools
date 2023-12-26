@@ -1,5 +1,5 @@
+import { CertificateType } from '../types';
 import { getSpreadsheetValues, initSpreadsheets } from './spreadsheet';
-import { CertificateType } from './types';
 
 type FilterBy = {
   isaId?: string;
@@ -7,7 +7,7 @@ type FilterBy = {
   certId?: string;
 };
 
-export const getInstructors = async (filterBy: FilterBy = {}) => {
+const getInstructors = async (filterBy: FilterBy = {}) => {
   return getCertificates('instructor', [
     'certId',
     'isaId',
@@ -21,7 +21,7 @@ export const getInstructors = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getRiggers = async (filterBy: FilterBy = {}) => {
+const getRiggers = async (filterBy: FilterBy = {}) => {
   return getCertificates('rigger', [
     'certId',
     'isaId',
@@ -35,7 +35,7 @@ export const getRiggers = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getAthleticAwards = async (filterBy: FilterBy = {}) => {
+const getAthleticAwards = async (filterBy: FilterBy = {}) => {
   return getCertificates('athletic-award', [
     'certId',
     'isaId',
@@ -53,7 +53,7 @@ export const getAthleticAwards = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getAthleteExcellences = async (filterBy: FilterBy = {}) => {
+const getAthleteExcellences = async (filterBy: FilterBy = {}) => {
   return getCertificates('athlete-certificate-of-exellence', [
     'certId',
     'isaId',
@@ -68,7 +68,7 @@ export const getAthleteExcellences = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getContestOrganizers = async (filterBy: FilterBy = {}) => {
+const getContestOrganizers = async (filterBy: FilterBy = {}) => {
   return getCertificates('contest-organizer', [
     'certId',
     'isaId',
@@ -83,7 +83,7 @@ export const getContestOrganizers = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getJudges = async (filterBy: FilterBy = {}) => {
+const getJudges = async (filterBy: FilterBy = {}) => {
   return getCertificates('judge', [
     'certId',
     'isaId',
@@ -98,13 +98,13 @@ export const getJudges = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getISAMembers = async (filterBy: FilterBy = {}) => {
+const getISAMembers = async (filterBy: FilterBy = {}) => {
   return getCertificates('isa-membership', ['certId', 'isaId', 'email', 'membership', 'name', 'date', 'location']).then(
     filterCertificates(filterBy),
   );
 };
 
-export const getWorldRecords = async (filterBy: FilterBy = {}) => {
+const getWorldRecords = async (filterBy: FilterBy = {}) => {
   return getCertificates('world-record', [
     'certId',
     'isaId',
@@ -117,13 +117,13 @@ export const getWorldRecords = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getHonoraryMembers = async (filterBy: FilterBy = {}) => {
+const getHonoraryMembers = async (filterBy: FilterBy = {}) => {
   return getCertificates('honoraryMember', ['certId', 'isaId', 'email', 'name', 'date']).then(
     filterCertificates(filterBy),
   );
 };
 
-export const getApprovedGears = async (filterBy: FilterBy = {}) => {
+const getApprovedGears = async (filterBy: FilterBy = {}) => {
   return getCertificates('approved-gear', [
     'certId',
     'isaId',
@@ -142,7 +142,7 @@ export const getApprovedGears = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
-export const getAllCertificates = async (filterBy: FilterBy = {}) => {
+const getAllItems = async (filterBy: FilterBy = {}) => {
   await initSpreadsheets();
 
   const certs: {
@@ -273,34 +273,7 @@ const certificateTypeToRange = (certificateType: CertificateType) => {
   }
 };
 
-const rangeToCertificateType = (range: string): CertificateType => {
-  switch (range) {
-    case 'Instructors':
-      return 'instructor';
-    case 'Riggers':
-      return 'rigger';
-    case 'Athletic Award(Contest)':
-      return 'athletic-award';
-    case 'Athlete Certificate Of Exellence(Year)':
-      return 'athlete-certificate-of-exellence';
-    case 'Contest Organizer':
-      return 'contest-organizer';
-    case 'Judge':
-      return 'judge';
-    case 'ISA Membership':
-      return 'isa-membership';
-    case 'World Records':
-      return 'world-record';
-    case 'Honorary Members':
-      return 'honoraryMember';
-    case 'Approved Gear':
-      return 'approved-gear';
-    default:
-      throw new Error(`Unknown certificate type for range: ${range}`);
-  }
-};
-
-export const certificates = {
+export const certificateSpreadsheet = {
   getInstructors,
   getRiggers,
   getAthleticAwards,
@@ -311,5 +284,5 @@ export const certificates = {
   getWorldRecords,
   getHonoraryMembers,
   getApprovedGears,
-  getAllCertificates,
+  getAllItems,
 };

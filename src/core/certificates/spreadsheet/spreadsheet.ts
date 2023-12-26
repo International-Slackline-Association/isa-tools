@@ -1,7 +1,7 @@
 import { GetParameterCommand, GetParametersCommand } from '@aws-sdk/client-ssm';
 import { ssm } from 'core/aws/clients';
 import { google, sheets_v4 } from 'googleapis';
-import { CertificateType } from './types';
+import { CertificateType } from '../types';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const googleCredsSSMParameter = 'isa-documents-google-credentials-json';

@@ -1,7 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 export const dynamodbResources: NonNullable<AWS['resources']>['Resources'] = {
-  UsersTable: {
+  IsaDocumentsTable: {
     Type: 'AWS::DynamoDB::Table',
     Properties: {
       TableName: 'isa-documents-${sls:stage}',

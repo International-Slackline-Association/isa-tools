@@ -11,10 +11,10 @@
     "removeComments": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "strict": true,
+    "strict": true
   },
   "include": ["src/**/*.ts", "serverless.ts", "misc/scripts/**/*.ts"],
-  "exclude": ["node_modules/**/*",],
+  "exclude": ["node_modules/**/*"],
   "ts-node": {
     "require": ["tsconfig-paths/register"],
     "files": true

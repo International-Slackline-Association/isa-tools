@@ -3,6 +3,7 @@ import type { AWS } from '@serverless/typescript';
 import api from '@functions/api/lambda';
 import imageProcessorApi from '@functions/image-processor-api/lambda';
 import logger from '@functions/logger/lambda';
+import certificateTester from '@functions/certificateTester/lambda';
 
 import { cloudwatchResources } from 'infrastructure/cloudwatch';
 import { s3Resources } from 'infrastructure/s3';
@@ -37,7 +38,9 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       APPLICATION_LOG_GROUP_NAME: { Ref: 'ApplicationLogsGroup' },
       IMAGE_PROCESSING_INPUT_S3_BUCKET: { Ref: 'ImageProcessingInputS3Bucket' },
+      TEMPORARY_UPLOADS_S3_BUCKET: { Ref: 'TemporaryUploadsS3BBucket' },
       ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY: '${ssm:/isa-documents-trusted-service-api-key}',
+      ISA_DOCUMENTS_TABLE_NAME: { Ref: 'IsaDocumentsTable' },
     },
     iam: {
       role: {
@@ -53,10 +56,28 @@ const serverlessConfiguration: AWS = {
           },
           {
             Effect: 'Allow',
+            Action: ['dynamodb:*'],
+            Resource: [
+              {
+                'Fn::Join': ['', [{ 'Fn::GetAtt': ['IsaDocumentsTable', 'Arn'] }, '*']],
+              },
+            ],
+          },
+          {
+            Effect: 'Allow',
             Action: ['s3:GetObject', 's3:PutObject'],
             Resource: [
               {
                 'Fn::Join': ['', [{ 'Fn::GetAtt': ['ImageProcessingInputS3Bucket', 'Arn'] }, '*']],
+              },
+            ],
+          },
+          {
+            Effect: 'Allow',
+            Action: ['s3:GetObject', 's3:PutObject'],
+            Resource: [
+              {
+                'Fn::Join': ['', [{ 'Fn::GetAtt': ['TemporaryUploadsS3BBucket', 'Arn'] }, '*']],
               },
             ],
           },
@@ -92,7 +113,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { api, imageProcessorApi, logger },
+  functions: { api, imageProcessorApi, logger, certificateTester },
   package: { individually: true },
   custom: {
     esbuild: {
@@ -104,6 +125,10 @@ const serverlessConfiguration: AWS = {
       define: { 'require.resolve': undefined },
       platform: 'node',
       concurrency: 10,
+      loader: {
+        '.pdf': 'dataurl',
+        '.ttf': 'dataurl',
+      },
     },
     prune: {
       automatic: true,

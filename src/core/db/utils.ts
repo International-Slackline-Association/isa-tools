@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash.clonedeep';
 import { ConvertKeysToInterface, DDBTableKeyAttrs, DDBTableRequiredKeyAttrs, TransformerParams } from 'core/db/types';
 
-export const TABLE_NAME = process.env.SLACKMAP_TABLE_NAME as string;
+export const TABLE_NAME = process.env.ISA_DOCUMENTS_TABLE_NAME as string;
 
 export const INDEX_NAMES = {
   LSI: 'LSI',
