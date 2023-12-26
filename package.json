@@ -8,6 +8,7 @@
     "checkTs": "tsc --noEmit",
     "package": "serverless package",
     "deploy": "serverless deploy --verbose",
+    "deploy:api": "serverless deploy function -f api",
     "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi"
   },
   "engines": {
@@ -28,6 +29,7 @@
     "googleapis": "129.0.0",
     "jsonwebtoken": "9.0.2",
     "lodash.clonedeep": "4.5.0",
+    "qrcode": "1.5.3",
     "winston": "3.11.0",
     "zod": "3.22.4"
   },
@@ -40,6 +42,7 @@
     "@types/jsonwebtoken": "9.0.5",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/node": "20.10.5",
+    "@types/qrcode": "1.5.5",
     "@typescript-eslint/eslint-plugin": "6.16.0",
     "@typescript-eslint/parser": "6.16.0",
     "esbuild": "0.19.10",

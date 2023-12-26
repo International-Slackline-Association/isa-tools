@@ -19,3 +19,9 @@ export const validateApiPayload = <T extends ZodTypeAny>(payload: unknown, schem
     throw error;
   }
 };
+
+export const verifyTrustedServiceRequest = (req: Request) => {
+  if (!req.includesTrustedApiKey) {
+    throw new Error('Unauthorized');
+  }
+};

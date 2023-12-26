@@ -4,6 +4,13 @@ import { getCurrentInvoke } from '@vendia/serverless-express';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { logger } from 'core/utils/logger';
 
+export const injectCommonlyUsedHeadersMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
+  if (req.headers['x-api-key'] === process.env.ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY) {
+    req.includesTrustedApiKey = true;
+  }
+
+  next();
+};
 export const errorMiddleware: ErrorRequestHandler = async (error, req, res, next) => {
   if (!error) {
     next();

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { catchExpressJsErrorWrapper, validateApiPayload } from '../utils';
+import { catchExpressJsErrorWrapper, validateApiPayload, verifyTrustedServiceRequest } from '../utils';
 import { certificates } from 'core/certificates';
 import { createVerifiableDocument } from 'core/documentVerification';
 import { ListCertificatesQueryParams, listCertificatesQueryParamsSchema } from './schema';
@@ -11,15 +11,20 @@ export const getAllInstructorCertificates = async (req: Request, res: Response) 
 
 export const getAllRiggerCertificates = async (req: Request, res: Response) => {
   const riggers = await certificates.getRiggers();
-  res.json({ items: riggers });
+  res.json({ items: riggers[0] });
 };
 
-export const getCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>, res: Response) => {
+export const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>, res: Response) => {
+  verifyTrustedServiceRequest(req);
+
   const query = validateApiPayload(req.query, listCertificatesQueryParamsSchema);
 
+  const x = await certificates.getAllCertificates({
+    isaId: query.userId,
+    email: query.email,
+  });
 
-  // const certificates = await getAllUserCertificatesFromSpreadsheet(req.user.isaId, req.user.email);
-  res.json({ items: [] });
+  res.json({ items: x });
 };
 
 // export const getInstructorCertificate = async (req: Request, res: Response) => {
@@ -66,7 +71,7 @@ export const getCertificates = async (req: Request<any, any, any, ListCertificat
 // };
 
 export const certificateApi = express.Router();
-certificateApi.get('/', catchExpressJsErrorWrapper(getCertificates));
+certificateApi.get('/', catchExpressJsErrorWrapper(listCertificates));
 // certificateApi.get('/instructor/:certId', catchExpressJsErrorWrapper(getInstructorCertificate));
 // certificateApi.get('/rigger/:certId', catchExpressJsErrorWrapper(getRiggerCertificate));
 // certificateApi.get('/world-record/:certId', catchExpressJsErrorWrapper(getWorldRecordCertificate));

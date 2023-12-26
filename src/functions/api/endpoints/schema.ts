@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 export const listCertificatesQueryParamsSchema = z
   .object({
-    userId: z.string().uuid().optional(),
-    email: z.string().email().optional(),
+    userId: z.string().optional(),
+    email: z.string().optional(),
     certificateType: z.string().optional(),
   })
   .strip();

@@ -1,7 +1,7 @@
 import { default as express, Express, urlencoded, json } from 'express';
 import cors from 'cors';
 import { certificateApi } from './endpoints/certificate-api';
-import { errorMiddleware, notFoundMiddleware } from './middlewares';
+import { errorMiddleware, injectCommonlyUsedHeadersMiddleware, notFoundMiddleware } from './middlewares';
 
 const app = express();
 
@@ -20,7 +20,7 @@ const setupRoutes = (app: Express) => {
 };
 
 const registerStartingMiddlewares = (app: Express) => {
-  // nothing needed
+  app.use(injectCommonlyUsedHeadersMiddleware);
 };
 
 const registerEndingMiddlewares = (app: Express) => {

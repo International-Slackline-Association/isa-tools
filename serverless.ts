@@ -1,5 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
+import api from '@functions/api/lambda';
 import imageProcessorApi from '@functions/image-processor-api/lambda';
 import logger from '@functions/logger/lambda';
 
@@ -24,8 +25,8 @@ const serverlessConfiguration: AWS = {
       binaryMediaTypes: ['image/jpeg', 'image/png', 'image/webp'],
       apiKeys: [
         {
-          name: 'ImageProcessorApiKey',
-          description: 'API key for the image processor API',
+          name: 'TrustedServiceApiKey',
+          description: 'API key for trusted services',
           enabled: true,
         },
       ],
@@ -36,6 +37,7 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       APPLICATION_LOG_GROUP_NAME: { Ref: 'ApplicationLogsGroup' },
       IMAGE_PROCESSING_INPUT_S3_BUCKET: { Ref: 'ImageProcessingInputS3Bucket' },
+      ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY: '${ssm:/isa-documents-trusted-service-api-key}',
     },
     iam: {
       role: {
@@ -57,6 +59,11 @@ const serverlessConfiguration: AWS = {
                 'Fn::Join': ['', [{ 'Fn::GetAtt': ['ImageProcessingInputS3Bucket', 'Arn'] }, '*']],
               },
             ],
+          },
+          {
+            Effect: 'Allow',
+            Action: ['ssm:GetParameters', 'ssm:GetParameter', 'ssm:GetParametersByPath'],
+            Resource: ['arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/isa-documents*'],
           },
           {
             Effect: 'Allow',
@@ -85,7 +92,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { imageProcessorApi, logger },
+  functions: { api, imageProcessorApi, logger },
   package: { individually: true },
   custom: {
     esbuild: {

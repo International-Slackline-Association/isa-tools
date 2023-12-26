@@ -1,71 +1,46 @@
-import { GetParametersCommand } from '@aws-sdk/client-ssm';
+import { GetParameterCommand, GetParametersCommand } from '@aws-sdk/client-ssm';
 import { ssm } from 'core/aws/clients';
 import { google, sheets_v4 } from 'googleapis';
 import { CertificateType } from './types';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const googleCredsSSMParameter = 'isa-documents-google-credentials-json';
-const spreadsheetIdSSMParameter = 'isa-documents-certificates-spreadsheetId';
+const certificatesSpreadsheetId = '1WO8RDDn6WKTmZQX4YK9xNwWfh0-eciIX0fdSvsgNRsA';
 
 let sheets: sheets_v4.Sheets;
-let cache: {
-  googleCreds: any;
-  spreadsheetId: string;
+const cache: {
+  googleCreds?: any;
+  ranges: { [key: string]: sheets_v4.Schema$ValueRange[] | undefined };
+  expiresIn: number;
+} = {
+  ranges: {},
+  expiresIn: Date.now() + 1000 * 60 * 5, // 5 minutes
 };
 
-export const getSpreadsheetValues = async (certificateTypes: CertificateType[]) => {
-  await authorize();
-  const { spreadsheetId } = await loadSSMParameters();
+export const initSpreadsheets = async () => {
+  return authorizeSpreadsheet();
+};
 
-  const ranges = certificateTypes.map((r) => certificateTypeToRange(r));
+export const getSpreadsheetValues = async (range: string) => {
+  const cachedValue = cache.ranges[range] || [];
+  if (cachedValue.length > 0 && cache.expiresIn > Date.now()) {
+    return cachedValue;
+  }
+  await authorizeSpreadsheet();
+
   const result = await sheets.spreadsheets.values.batchGet({
-    spreadsheetId,
-    ranges,
+    spreadsheetId: certificatesSpreadsheetId,
+    ranges: [range],
   });
+  cache.ranges[range] = result.data.valueRanges;
+  cache.expiresIn = Date.now() + 1000 * 60 * 5; // 5 minutes
   return result.data.valueRanges;
 };
 
-const certificateTypeToRange = (certificateType: CertificateType) => {
-  switch (certificateType) {
-    case 'instructor':
-      return 'Instructors';
-    case 'rigger':
-      return 'Riggers';
-    case 'athletic-award':
-      return 'Athletic Award(Contest)';
-    case 'athlete-certificate-of-exellence':
-      return 'Athlete Certificate Of Exellence(Year)';
-    case 'contest-organizer':
-      return 'Contest Organizer';
-    case 'judge':
-      return 'Judge';
-    case 'isa-membership':
-      return 'ISA Membership';
-    case 'world-record':
-      return 'World Records';
-    case 'honoraryMember':
-      return 'Honorary Members';
-    case 'approved-gear':
-      return 'Approved Gear';
-  }
-};
-
-const loadSSMParameters = async () => {
-  if (cache) {
-    return cache;
-  }
-  const ssmParam = await ssm.send(
-    new GetParametersCommand({ Names: [googleCredsSSMParameter, spreadsheetIdSSMParameter] }),
-  );
-  const googleCreds = JSON.parse(ssmParam.Parameters?.filter((p) => p.Name === googleCredsSSMParameter)[0].Value ?? '');
-  const spreadsheetId = ssmParam.Parameters?.filter((p) => p.Name === spreadsheetIdSSMParameter)[0].Value ?? '';
-  cache = { googleCreds, spreadsheetId };
-  return { googleCreds, spreadsheetId };
-};
-
-const authorize = async () => {
+const authorizeSpreadsheet = async () => {
   if (!sheets) {
-    const { googleCreds } = await loadSSMParameters();
+    const ssmParam = await ssm.send(new GetParameterCommand({ Name: googleCredsSSMParameter }));
+    const googleCreds = JSON.parse(ssmParam.Parameter?.Value || '');
     const client = new google.auth.JWT(googleCreds.client_email, undefined, googleCreds.private_key, SCOPES);
     await client.authorize();
     sheets = google.sheets({ version: 'v4', auth: client });
