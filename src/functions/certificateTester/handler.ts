@@ -1,18 +1,18 @@
 import type { Handler } from 'aws-lambda';
-import { certificateGenerator } from 'core/certificates/generators/certificateGenerator';
+import fs from 'fs';
+import { generateCertificatePDF } from 'core/certificates/generators/certificateGenerator';
 
 const certificateTester: Handler = async (event) => {
-  await certificateGenerator.generate(
-    {
-      certificateType: 'instructor',
-      certificateId: 'instructor_1',
-      subject: 'test',
-      language: 'en',
-    },
-    {
-      writeToLocal: true,
-    },
-  );
+  const certificateType = event as any;
+
+  const { pdfBytes } = await generateCertificatePDF({
+    certificateType: certificateType,
+    certificateId: `${certificateType}_1`,
+    subject: 'test',
+    language: 'en',
+    skipQRCode: true,
+  });
+  fs.writeFileSync('test-certificate.pdf', pdfBytes);
 };
 
 export const main = certificateTester;

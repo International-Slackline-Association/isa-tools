@@ -2,13 +2,13 @@ import { getHash, putHash } from 'core/db/genericHash';
 import { DDBGenericHashItem } from 'core/db/genericHash/types';
 import { hashValue, signJWT, verifyJWT } from 'core/documentVerification/crypto';
 import { JwtPayload } from 'jsonwebtoken';
-import dateFormat from 'dateformat';
+import * as dateFns from 'date-fns';
 
 export interface VerifiableDocumentPayload {
   content: string;
 }
 
-export const createVerifiableDocument = async (document: {
+export const createSignedDocument = async (document: {
   expiresInSeconds: number;
   subject: string;
   content: string;
@@ -23,7 +23,7 @@ export const createVerifiableDocument = async (document: {
     {
       expiresIn: expiresInSeconds,
       subject: subject,
-      issuer: 'documents.slacklineinternational.org',
+      issuer: 'docs.slacklineinternational.org',
     },
   );
 
@@ -42,11 +42,11 @@ export const createVerifiableDocument = async (document: {
     hash,
     token,
     verificationUrl: generateVerificationUrl(hash, token),
-    expiresAt: dateFormat(Date.now() + expiresInSeconds * 1000, 'longDate'),
+    expiresAt: dateFns.addSeconds(new Date(), expiresInSeconds).toISOString(),
   };
 };
 
-export const getVerifiableDocument = async (id?: string, token?: string) => {
+export const getSignedDocument = async (id?: string, token?: string) => {
   let signedContent = token;
   if (id) {
     const hash = await getHash(id);
@@ -64,8 +64,8 @@ export const getVerifiableDocument = async (id?: string, token?: string) => {
       issuer: iss,
       subject: sub,
       payload: payload as VerifiableDocumentPayload,
-      issuedAt: dateFormat(new Date(iat! * 1000), 'longDate'),
-      expiresAt: dateFormat(new Date(exp! * 1000), 'longDate'),
+      issuedAt: new Date(iat! * 1000).toISOString(),
+      expiresAt: new Date(exp! * 1000).toISOString(),
     };
   } catch (error) {
     if (error instanceof Error) {

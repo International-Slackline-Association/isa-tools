@@ -57,7 +57,7 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
         Rules: [
           {
             Status: 'Enabled',
-            ExpirationInDays: 30,
+            ExpirationInDays: 90,
           },
         ],
       },

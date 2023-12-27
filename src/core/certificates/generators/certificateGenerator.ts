@@ -1,107 +1,117 @@
 import { PDFDocument } from 'pdf-lib';
-import * as dateFns from 'date-fns';
-import fs from 'fs';
-
 import { CertificateType } from '../types';
 import { certificateSpreadsheet } from '../spreadsheet';
-import { createVerifiableDocument } from 'core/documentVerification';
 import { pdfGenerators } from './pdfGenerators';
-import { putCertificateToS3 } from './s3';
+import { formatCertificateDate, signCertificate } from './utils';
 
-export const generate = async (
-  payload: {
-    certificateType: CertificateType;
-    certificateId: string;
-    subject: string;
-    language: string;
-  },
-  opts: {
-    writeToLocal?: boolean;
-  } = {},
-) => {
-  const { certificateType, certificateId, subject, language } = payload;
-  let pdf: PDFDocument | undefined;
-  switch (certificateType) {
-    case 'instructor':
-      pdf = await generateInstructor({ certificateId, subject, language, skipQRCode: opts.writeToLocal });
-      break;
-    default:
-      break;
-  }
-  if (!pdf) {
-    throw new Error('Certificate cannot be generated!');
-  }
-
-  const bytes = await pdf.save();
-  const buffer = Buffer.from(bytes);
-
-  let presignedUrl: string | undefined;
-  if (opts.writeToLocal) {
-    fs.writeFileSync(`./${certificateId}.pdf`, buffer);
-  } else {
-    const resp = await putCertificateToS3(`${certificateId}.pdf`, buffer);
-    presignedUrl = resp.presignedUrl;
-  }
-  return { presignedUrl };
-};
-
-const generateInstructor = async (payload: {
+type GenerateCertificatePayload = {
   certificateId: string;
   subject: string;
   language: string;
   skipQRCode?: boolean;
-}) => {
-  const { certificateId, subject, language } = payload;
-  const instructorItem = (await certificateSpreadsheet.getInstructors({ certId: certificateId }))[0];
+};
 
-  const startDate = dateFns.format(dateFns.parse(instructorItem.startDate!, 'dd.MM.yyyy', new Date()), 'PP');
-  const endDate = dateFns.parse(instructorItem.endDate!, 'dd.MM.yyyy', new Date());
-  const endDateString = dateFns.format(endDate, 'PP');
-
-  let verificationUrl: string | undefined;
-
-  if (payload.skipQRCode) {
-    verificationUrl = '';
-  } else {
-    const document = await createVerifiableDocument({
-      subject,
-      expiresInSeconds: dateFns.differenceInSeconds(endDate, new Date()),
-      createHash: true,
-      content: `"${instructorItem.name} ${instructorItem.surname}" has a valid "${instructorItem.level}" certificate valid until "${endDateString}"`,
-    });
-    verificationUrl = document.verificationUrl;
+export const generateCertificatePDF = async (
+  payload: {
+    certificateType: CertificateType;
+  } & GenerateCertificatePayload,
+) => {
+  const { certificateType, certificateId, subject, language, skipQRCode } = payload;
+  let pdf: PDFDocument | undefined;
+  const params = { certificateId, subject, language, skipQRCode };
+  switch (certificateType) {
+    case 'instructor':
+      pdf = await generateInstructor(params);
+      break;
+    case 'rigger':
+      pdf = await generateRigger(params);
+      break;
+    case 'world-record':
+      pdf = await generateWorldRecord(params);
+      break;
+    default:
+      throw new Error('Invalid certificate to genereate PDF ');
   }
+
+  const bytes = await pdf!.save();
+  return { pdfBytes: bytes };
+};
+
+const generateInstructor = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getInstructors({ certId: certificateId }))[0];
+
+  const startDate = formatCertificateDate(item.startDate!);
+  const endDate = formatCertificateDate(item.endDate!);
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    expireDate: endDate.date,
+    skipQRCode,
+    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate valid until "${endDate.pretty}"`,
+  });
 
   const pdf = await pdfGenerators.generateInstructorPDF(
     language,
     {
-      fullname: `${instructorItem.name} ${instructorItem.surname}`.toUpperCase(),
-      level: instructorItem.level!.toUpperCase(),
-      startDate: startDate,
-      endDate: endDateString,
+      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      level: item.level!.toUpperCase(),
+      startDate: startDate.formal,
+      endDate: endDate.formal,
     },
     verificationUrl,
   );
   return pdf;
 };
 
-export const certificateGenerator = {
-  generate,
+const generateRigger = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getRiggers({ certId: certificateId }))[0];
+
+  const startDate = formatCertificateDate(item.startDate!);
+  const expireDate = formatCertificateDate(item.endDate!);
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    expireDate: expireDate.date,
+    skipQRCode,
+    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate valid until "${expireDate.pretty}"`,
+  });
+
+  const pdf = await pdfGenerators.generateRiggerPDF(
+    language,
+    {
+      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      level: item.level!.toUpperCase(),
+      startDate: startDate.formal,
+      endDate: expireDate.formal,
+    },
+    verificationUrl,
+  );
+  return pdf;
 };
 
-const openPDF = async (pdf: PDFDocument) => {
-  const pdfBytes = await pdf.save();
-  const file = new Blob([pdfBytes], { type: 'application/pdf' });
-  const fileURL = URL.createObjectURL(file);
-  const pdfWindow = window.open();
-  pdfWindow!.location.href = fileURL;
-};
+const generateWorldRecord = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getWorldRecords({ certId: certificateId }))[0];
 
-async function downloadPDF(pdf: PDFDocument, fileName: string) {
-  const pdfBytes = await pdf.save();
-  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const link = document.createElement('a');
-  link.href = window.URL.createObjectURL(blob);
-  link.download = fileName;
-  link.click();
-}
+  const date = formatCertificateDate(item.date!);
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name}" has a valid WORLD RECORD certificate for category "${item.category}"`,
+  });
+
+  const pdf = await pdfGenerators.generateWorldRecordPDF(
+    language,
+    {
+      name: item.name!,
+      specs: item.specs!,
+      category: item.category!,
+      date: date.formal,
+      recordType: item.recordType!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};

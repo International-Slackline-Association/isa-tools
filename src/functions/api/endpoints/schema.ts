@@ -20,3 +20,14 @@ export const generateCertificatePostBodySchema = z
   .strip();
 
 export type GenerateCertificatePostBody = z.infer<typeof generateCertificatePostBodySchema>;
+
+export const signDocumentPostBodySchema = z
+  .object({
+    subject: z.string(),
+    expiresInSeconds: z.number(),
+    createHash: z.boolean().optional(),
+    content: z.string().max(1024).min(10),
+  })
+  .strip();
+
+export type SignDocumentePostBody = z.infer<typeof signDocumentPostBodySchema>;

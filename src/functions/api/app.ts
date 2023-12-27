@@ -2,6 +2,7 @@ import { default as express, Express, urlencoded, json } from 'express';
 import cors from 'cors';
 import { certificateApi } from './endpoints/certificate-api';
 import { errorMiddleware, injectCommonlyUsedHeadersMiddleware, notFoundMiddleware } from './middlewares';
+import { signApi } from './endpoints/sign-api';
 
 const app = express();
 
@@ -17,6 +18,8 @@ const setupExpressApp = (app: Express) => {
 
 const setupRoutes = (app: Express) => {
   app.use('/certificate', certificateApi);
+  app.use('/sign', signApi);
+
 };
 
 const registerStartingMiddlewares = (app: Express) => {

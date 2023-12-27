@@ -1,8 +1,7 @@
-import PDF_EN from './templates/instructor-en.pdf';
-
 import { PDFDocument } from 'pdf-lib';
 import { convertToYCoordinate, loadPDFTemplate, black, embedQRCodeToPDF } from './utils';
 import { PDFModificationsObject } from './types';
+import { blankPDFTemplate } from './templates';
 
 interface Props {
   fullname: string;
@@ -11,10 +10,8 @@ interface Props {
   endDate: string;
 }
 
-export const PDFs: { [key: string]: string } = { en: PDF_EN };
-
 export async function generate(language: string, data: Props, qrCodeUrl: string): Promise<PDFDocument> {
-  const blankPDF = PDFs[language] || PDFs.en;
+  const blankPDF = blankPDFTemplate('instructor', language);
 
   const { boldFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont, berkshireFont } =
     await loadPDFTemplate(blankPDF);
@@ -38,7 +35,7 @@ export async function generate(language: string, data: Props, qrCodeUrl: string)
       size: 11,
       font: semiboldFont,
       color: black,
-      x: 400,
+      x: 401,
       y: convertToYCoordinate(387, pageHeight, semiboldFont, 11),
     },
     endDate: {

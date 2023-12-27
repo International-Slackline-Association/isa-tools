@@ -4,12 +4,15 @@ import { certificateSpreadsheet } from 'core/certificates/spreadsheet';
 import {
   GenerateCertificatePostBody,
   ListCertificatesQueryParams,
+  SignDocumentePostBody,
   generateCertificatePostBodySchema,
   listCertificatesQueryParamsSchema,
+  signDocumentPostBodySchema,
 } from './schema';
 import { generateCertificatePDF } from 'core/certificates/generators/certificateGenerator';
 import { CertificateType } from 'core/certificates/types';
 import { uploadPDFToS3 } from 'core/aws/s3';
+import { createSignedDocument } from 'core/documentVerification';
 
 const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>, res: Response) => {
   verifyTrustedServiceRequest(req);
@@ -24,24 +27,25 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
   res.json({ items: certs });
 };
 
-const generateCertificate = async (req: Request<any, any, GenerateCertificatePostBody>, res: Response) => {
+const sign = async (req: Request<any, any, SignDocumentePostBody>, res: Response) => {
   verifyTrustedServiceRequest(req);
 
-  const body = validateApiPayload(req.body, generateCertificatePostBodySchema);
+  const body = validateApiPayload(req.body, signDocumentPostBodySchema);
 
-  const { pdfBytes } = await generateCertificatePDF({
-    certificateType: body.certificateType as CertificateType,
-    certificateId: body.certificateId,
+  const { hash, token, verificationUrl, expiresAt } = await createSignedDocument({
     subject: body.subject,
-    language: body.language,
+    expiresInSeconds: body.expiresInSeconds,
+    createHash: body.createHash,
+    content: body.content,
   });
 
-  const buffer = Buffer.from(pdfBytes);
-  const { presignedUrl } = await uploadPDFToS3(`certificates/${body.certificateId}-${body.language}.pdf`, buffer);
-
-  res.json({ downloadUrl: presignedUrl });
+  res.json({
+    hash,
+    token,
+    verificationUrl,
+    expiresAt,
+  });
 };
 
-export const certificateApi = express.Router();
-certificateApi.get('/', catchExpressJsErrorWrapper(listCertificates));
-certificateApi.post('/generate', catchExpressJsErrorWrapper(generateCertificate));
+export const signApi = express.Router();
+signApi.post('/', catchExpressJsErrorWrapper(sign));
