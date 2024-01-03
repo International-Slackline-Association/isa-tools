@@ -81,21 +81,26 @@ const resize = async (sharpObject: Sharp, options: ProcessImagePostBody) => {
   }
 
   if (opts.scale) {
-    sharpObject.resize({
-      width: Math.round(metadata.width * opts.scale),
-      height: Math.round(metadata.height * opts.scale),
-      fit: opts.fit,
-      withoutEnlargement: true,
-    });
+    sharpObject
+      .resize({
+        width: Math.round(metadata.width * opts.scale),
+        height: Math.round(metadata.height * opts.scale),
+        fit: opts.fit,
+        withoutEnlargement: true,
+      })
+      .withMetadata();
     return;
   }
   if (opts.width && opts.height) {
-    sharpObject.resize({
-      width: opts.width,
-      height: opts.height,
-      fit: opts.fit,
-      withoutEnlargement: true,
-    });
+    sharpObject
+      .resize({
+        width: opts.width,
+        height: opts.height,
+        fit: opts.fit,
+        withoutEnlargement: true,
+      })
+      .withMetadata();
+
     return;
   }
 };

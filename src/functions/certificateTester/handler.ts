@@ -6,8 +6,8 @@ const certificateTester: Handler = async (event) => {
   const certificateType = event as any;
 
   const { pdfBytes } = await generateCertificatePDF({
-    certificateType: certificateType,
-    certificateId: `${certificateType}_1`,
+    certificateType: 'instructor',
+    certificateId: ``,
     subject: 'test',
     language: 'en',
     skipQRCode: true,

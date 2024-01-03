@@ -29,6 +29,9 @@ export const generateCertificatePDF = async (
     case 'world-record':
       pdf = await generateWorldRecord(params);
       break;
+    case 'athletic-award':
+      pdf = await generateAthleticAward(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -110,6 +113,35 @@ const generateWorldRecord = async (payload: GenerateCertificatePayload) => {
       category: item.category!,
       date: date.formal,
       recordType: item.recordType!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateAthleticAward = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getAthleticAwards({ certId: certificateId }))[0];
+
+  const date = formatCertificateDate(item.date!);
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name} ${item.surname}" has a valid ATHLETIC AWARD certificate for the contest "${item.competitionName}"`,
+  });
+
+  const pdf = await pdfGenerators.generateAthleticAwardPDF(
+    language,
+    {
+      representing: item.representing!,
+      rank: item.rank!,
+      competitionName: item.competitionName!,
+      location: item.location!,
+      dateOfFinals: date.formal!,
+      contestSize: item.contestSize!,
+      discipline: item.discipline!,
+      category: item.category!,
+      fullname: `${item.name} ${item.surname}`.toUpperCase(),
     },
     verificationUrl,
   );

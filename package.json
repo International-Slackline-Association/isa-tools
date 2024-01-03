@@ -10,7 +10,7 @@
     "deploy": "serverless deploy --verbose",
     "deploy:api": "serverless deploy function -f api",
     "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi",
-    "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose --raw"
+    "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose"
   },
   "engines": {
     "node": ">=20",
