@@ -5,7 +5,7 @@ export type CertificateType =
   | 'instructor'
   | 'rigger'
   | 'athletic-award'
-  | 'athlete-certificate-of-exellence'
+  | 'athlete-excellence'
   | 'contest-organizer'
   | 'judge'
   | 'isa-membership'

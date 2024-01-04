@@ -32,6 +32,9 @@ export const generateCertificatePDF = async (
     case 'athletic-award':
       pdf = await generateAthleticAward(params);
       break;
+    case 'athlete-excellence':
+      pdf = await generateAthleteExcellenceAward(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -102,7 +105,7 @@ const generateWorldRecord = async (payload: GenerateCertificatePayload) => {
   const { verificationUrl } = await signCertificate({
     subject,
     skipQRCode,
-    content: `"${item.name}" has a valid WORLD RECORD certificate for category "${item.category}"`,
+    content: `"${item.name}" has a valid WORLD RECORD certificate for category "${item.category} achieved on ${date.pretty}"`,
   });
 
   const pdf = await pdfGenerators.generateWorldRecordPDF(
@@ -142,6 +145,31 @@ const generateAthleticAward = async (payload: GenerateCertificatePayload) => {
       discipline: item.discipline!,
       category: item.category!,
       fullname: `${item.name} ${item.surname}`.toUpperCase(),
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateAthleteExcellenceAward = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getAthleteExcellences({ certId: certificateId }))[0];
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name} ${item.surname}" has a valid ATHLETE EXCELLENCE certificate for the year "${item.year}"`,
+  });
+
+  const pdf = await pdfGenerators.generateAthleteExellencePDF(
+    language,
+    {
+      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      representing: item.representing!,
+      year: item.year!,
+      rank: item.rank!,
+      category: item.category!,
+      discipline: item.discipline!,
     },
     verificationUrl,
   );

@@ -54,7 +54,7 @@ const getAthleticAwards = async (filterBy: FilterBy = {}) => {
 };
 
 const getAthleteExcellences = async (filterBy: FilterBy = {}) => {
-  return getCertificates('athlete-certificate-of-exellence', [
+  return getCertificates('athlete-excellence', [
     'certId',
     'isaId',
     'email',
@@ -177,7 +177,7 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
   promises.push(getAthleticAwards(filterBy).then(addToCertificates('athletic-award', (a) => 'Athletic Award')));
   promises.push(
     getAthleteExcellences(filterBy).then(
-      addToCertificates('athlete-certificate-of-exellence', (a) => 'Athlete Excellence'),
+      addToCertificates('athlete-excellence', (a) => 'Athlete Excellence'),
     ),
   );
   promises.push(
@@ -256,7 +256,7 @@ const certificateTypeToRange = (certificateType: CertificateType) => {
       return 'Riggers';
     case 'athletic-award':
       return 'Athletic Award(Contest)';
-    case 'athlete-certificate-of-exellence':
+    case 'athlete-excellence':
       return 'Athlete Certificate Of Exellence(Year)';
     case 'contest-organizer':
       return 'Contest Organizer';

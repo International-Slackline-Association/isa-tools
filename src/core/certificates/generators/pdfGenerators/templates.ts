@@ -2,6 +2,7 @@ import WORLD_RECORD_EN from './templates/world-record-en.pdf';
 import INSTRUCTOR_EN from './templates/instructor-en.pdf';
 import RIGGER_EN from './templates/rigger-en.pdf';
 import ATHLETIC_AWARD_EN from './templates/athletic-award-en.pdf';
+import ATHLETE_EXCELLENCE from './templates/athlete-excellence-en.pdf';
 
 import { CertificateType } from 'core/certificates/types';
 
@@ -15,6 +16,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, language: str
       return WORLD_RECORD_EN;
     case 'athletic-award':
       return ATHLETIC_AWARD_EN;
+    case 'athlete-excellence':
+      return ATHLETE_EXCELLENCE;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }
