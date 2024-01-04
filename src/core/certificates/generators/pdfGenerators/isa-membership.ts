@@ -1,67 +1,63 @@
-// import PDF_EN from './templates/isa-member-en.pdf';
+import { PDFDocument } from 'pdf-lib';
+import { PDFModificationsObject } from './types';
+import { loadPDFTemplate, convertToYCoordinate, embedQRCodeToPDF, black } from './utils';
+import { blankPDFTemplate } from './templates';
 
-// import { PDFDocument } from 'pdf-lib';
-// import {
-//   convertToYCoordinate,
-//   isaBlue,
-//   isaRed,
-//   loadPDFTemplate,
-// } from 'app/components/MyCertificates/pdfGenerators/utils';
-// import { PDFModificationsObject } from 'app/components/MyCertificates/pdfGenerators/types';
+interface Props {
+  membership: string;
+  name: string;
+  date: string;
+  location: string;
+}
 
-// interface Props {
-//   membership: string;
-//   name: string;
-//   date: string;
-//   location: string;
-// }
+export async function generate(language: string, data: Props, qrCodeUrl: string): Promise<PDFDocument> {
+  const blankPDF = blankPDFTemplate('isa-membership', language);
 
-// export const PDFs = { en: PDF_EN };
+  const { boldFont, berkshireFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } =
+    await loadPDFTemplate(blankPDF);
 
-// export async function generate(
-//   language: string,
-//   data: Props,
-// ): Promise<PDFDocument> {
-//   const blankPDF = PDFs[language] || PDFs.en;
+  const modifications: PDFModificationsObject<Props> = {
+    name: {
+      size: 36,
+      font: berkshireFont,
+      color: black,
+      x: pageWidth / 2 - berkshireFont.widthOfTextAtSize(data.name, 36) / 2,
+      y: convertToYCoordinate(176, pageHeight, berkshireFont, 36),
+    },
+    membership: {
+      size: 21,
+      font: boldFont,
+      color: black,
+      x: pageWidth / 2 - boldFont.widthOfTextAtSize(data.membership, 21) / 2,
+      y: convertToYCoordinate(260, pageHeight, boldFont, 21),
+    },
+    date: {
+      size: 16,
+      font: boldFont,
+      color: black,
+      x: 310,
+      y: convertToYCoordinate(368, pageHeight, boldFont, 16),
+    },
+    location: {
+      size: 16,
+      font: boldFont,
+      color: black,
+      x: 440,
+      y: convertToYCoordinate(368, pageHeight, boldFont, 16),
+    },
+  };
 
-//   const { boldFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } =
-//     await loadPDFTemplate(blankPDF);
+  for (const [key, value] of Object.entries(modifications)) {
+    page.drawText(data[key as keyof Props], {
+      ...value,
+    });
+  }
 
-//   const modifications: PDFModificationsObject<Props> = {
-//     membership: {
-//       size: 16,
-//       font: semiboldFont,
-//       color: isaBlue,
-//       x: pageWidth / 2 - boldFont.widthOfTextAtSize(data.membership, 16) / 2,
-//       y: convertToYCoordinate(208, pageHeight, boldFont, 21),
-//     },
-//     name: {
-//       size: 21,
-//       font: boldFont,
-//       color: isaRed,
-//       x: pageWidth / 2 - boldFont.widthOfTextAtSize(data.name, 21) / 2,
-//       y: convertToYCoordinate(241, pageHeight, boldFont, 21),
-//     },
-//     date: {
-//       size: 16,
-//       font: boldFont,
-//       color: isaBlue,
-//       x: pageWidth / 2 - boldFont.widthOfTextAtSize(data.date, 16) / 2,
-//       y: convertToYCoordinate(321, pageHeight, semiboldFont, 16),
-//     },
-//     location: {
-//       size: 16,
-//       font: boldFont,
-//       color: isaBlue,
-//       x: pageWidth / 2 - boldFont.widthOfTextAtSize(data.location, 16) / 2,
-//       y: convertToYCoordinate(373, pageHeight, semiboldFont, 16),
-//     },
-//   };
-
-//   for (const [key, value] of Object.entries(modifications)) {
-//     page.drawText(data[key], {
-//       ...value,
-//     });
-//   }
-//   return pdfDoc;
-// }
+  if (qrCodeUrl) {
+    await embedQRCodeToPDF(pdfDoc, qrCodeUrl, {
+      x: 696,
+      y: 438,
+    });
+  }
+  return pdfDoc;
+}

@@ -35,6 +35,9 @@ export const generateCertificatePDF = async (
     case 'athlete-excellence':
       pdf = await generateAthleteExcellenceAward(params);
       break;
+    case 'isa-membership':
+      pdf = await generateISAMembership(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -170,6 +173,31 @@ const generateAthleteExcellenceAward = async (payload: GenerateCertificatePayloa
       rank: item.rank!,
       category: item.category!,
       discipline: item.discipline!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateISAMembership = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getISAMembers({ certId: certificateId }))[0];
+
+  const date = formatCertificateDate(item.date!);
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name}" has a valid ISA MEMBER`,
+  });
+
+  const pdf = await pdfGenerators.generateIsaMembershipPDF(
+    language,
+    {
+      name: item.name!,
+      date: date.formal!,
+      location: item.location!,
+      membership: item.membership!,
     },
     verificationUrl,
   );
