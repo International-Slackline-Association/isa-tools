@@ -37,7 +37,6 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       APPLICATION_LOG_GROUP_NAME: { Ref: 'ApplicationLogsGroup' },
-      IMAGE_PROCESSING_INPUT_S3_BUCKET: { Ref: 'ImageProcessingInputS3Bucket' },
       TEMPORARY_UPLOADS_S3_BUCKET: { Ref: 'TemporaryUploadsS3BBucket' },
       ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY: '${ssm:/isa-documents-trusted-service-api-key}',
       ISA_DOCUMENTS_TABLE_NAME: { Ref: 'IsaDocumentsTable' },
@@ -68,19 +67,11 @@ const serverlessConfiguration: AWS = {
             Action: ['s3:GetObject', 's3:PutObject'],
             Resource: [
               {
-                'Fn::Join': ['', [{ 'Fn::GetAtt': ['ImageProcessingInputS3Bucket', 'Arn'] }, '*']],
-              },
-            ],
-          },
-          {
-            Effect: 'Allow',
-            Action: ['s3:GetObject', 's3:PutObject'],
-            Resource: [
-              {
                 'Fn::Join': ['', [{ 'Fn::GetAtt': ['TemporaryUploadsS3BBucket', 'Arn'] }, '*']],
               },
             ],
           },
+
           {
             Effect: 'Allow',
             Action: ['ssm:GetParameters', 'ssm:GetParameter', 'ssm:GetParametersByPath'],
@@ -148,13 +139,6 @@ const serverlessConfiguration: AWS = {
       ...s3Resources,
       ...backupResources,
       ...dynamodbResources,
-    },
-    Outputs: {
-      ImageProcessingInputS3Bucket: {
-        Value: {
-          Ref: 'ImageProcessingInputS3Bucket',
-        },
-      },
     },
   },
 };

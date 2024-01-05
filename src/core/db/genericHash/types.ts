@@ -7,6 +7,7 @@ interface NonKeyAttrs {
   ddb_ttl?: number;
   value: string;
   description?: string;
+  createdDate?: string;
 }
 
 export type DDBGenericHashItem = ParsedKeyAttrs & NonKeyAttrs;

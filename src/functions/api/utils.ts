@@ -25,3 +25,9 @@ export const verifyTrustedServiceRequest = (req: Request) => {
     throw new Error('Unauthorized');
   }
 };
+
+export const verifyTrustedDomainRequest = (req: Request) => {
+  if (!req.isFromTrustedDomain) {
+    throw new Error('Unauthorized');
+  }
+};

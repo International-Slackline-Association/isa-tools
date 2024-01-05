@@ -108,15 +108,14 @@ const generateWorldRecord = async (payload: GenerateCertificatePayload) => {
   const { verificationUrl } = await signCertificate({
     subject,
     skipQRCode,
-    content: `"${item.name}" has a valid WORLD RECORD certificate for category "${item.category} achieved on ${date.pretty}"`,
+    content: `"${item.name}" has a valid WORLD RECORD certificate for "${item.recordType}" achieved on ${date.pretty}`,
   });
 
   const pdf = await pdfGenerators.generateWorldRecordPDF(
     language,
     {
-      name: item.name!,
+      name: item.name!.toUpperCase(),
       specs: item.specs!,
-      category: item.category!,
       date: date.formal,
       recordType: item.recordType!,
     },

@@ -34,6 +34,7 @@ export const createSignedDocument = async (document: {
       ddb_ttl: Math.round(Date.now() / 1000) + expiresInSeconds,
       value: token,
       description: content.substring(0, 100),
+      createdDate: new Date().toISOString(),
     };
     await putHash(hashItem);
     hash = hashItem.hash;

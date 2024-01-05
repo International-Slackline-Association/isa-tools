@@ -1,5 +1,10 @@
 import express, { Request, Response } from 'express';
-import { catchExpressJsErrorWrapper, validateApiPayload, verifyTrustedServiceRequest } from '../utils';
+import {
+  catchExpressJsErrorWrapper,
+  validateApiPayload,
+  verifyTrustedDomainRequest,
+  verifyTrustedServiceRequest,
+} from '../utils';
 import { certificateSpreadsheet } from 'core/certificates/spreadsheet';
 import {
   GenerateCertificatePostBody,
@@ -12,16 +17,29 @@ import { CertificateType } from 'core/certificates/types';
 import { uploadPDFToS3 } from 'core/aws/s3';
 
 const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>, res: Response) => {
-  verifyTrustedServiceRequest(req);
+  verifyTrustedDomainRequest(req);
 
   const query = validateApiPayload(req.query, listCertificatesQueryParamsSchema);
 
   const certs = await certificateSpreadsheet.getAllItems({
-    isaId: query.userId,
+    isaId: query.isaId,
     email: query.email,
   });
 
-  res.json({ items: certs });
+  const certificateLanguages: { [key in CertificateType]: string[] } = {
+    instructor: ['en'],
+    rigger: ['en'],
+    'athletic-award': ['en'],
+    'athlete-excellence': ['en'],
+    'isa-membership': ['en'],
+    'world-record': ['en'],
+    'approved-gear': [],
+    judge: [],
+    'contest-organizer': [],
+    'honorary-member': [],
+  };
+
+  res.json({ certificates: certs, certificateLanguages });
 };
 
 const generateCertificate = async (req: Request<any, any, GenerateCertificatePostBody>, res: Response) => {
@@ -39,7 +57,7 @@ const generateCertificate = async (req: Request<any, any, GenerateCertificatePos
   const buffer = Buffer.from(pdfBytes);
   const { presignedUrl } = await uploadPDFToS3(`certificates/${body.certificateId}-${body.language}.pdf`, buffer);
 
-  res.json({ downloadUrl: presignedUrl });
+  res.json({ pdfUrl: presignedUrl, certificateId: body.certificateId });
 };
 
 export const certificateApi = express.Router();

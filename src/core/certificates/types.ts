@@ -1,6 +1,3 @@
-import type { AsyncReturnType } from 'type-fest';
-import { certificateSpreadsheet } from './spreadsheet';
-
 export type CertificateType =
   | 'instructor'
   | 'rigger'
@@ -10,7 +7,5 @@ export type CertificateType =
   | 'judge'
   | 'isa-membership'
   | 'world-record'
-  | 'honoraryMember'
+  | 'honorary-member'
   | 'approved-gear';
-
-export type InstructorItem = AsyncReturnType<typeof certificateSpreadsheet.getInstructors>[0];

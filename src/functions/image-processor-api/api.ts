@@ -11,7 +11,7 @@ export const processImage = async (req: Request<any, any, ProcessImagePostBody>,
 
   const s3Image = await s3.send(
     new GetObjectCommand({
-      Bucket: body.input.s3?.bucket || process.env.IMAGE_PROCESSING_INPUT_S3_BUCKET!,
+      Bucket: body.input.s3?.bucket || process.env.TEMPORARY_UPLOADS_S3_BUCKET!,
       Key: body.input.s3?.key,
     }),
   );

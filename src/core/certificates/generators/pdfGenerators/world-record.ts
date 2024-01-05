@@ -7,7 +7,6 @@ interface Props {
   recordType: string;
   specs: string;
   name: string;
-  category: string;
   date: string;
 }
 

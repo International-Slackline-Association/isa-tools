@@ -1,4 +1,4 @@
-// import * as honoraryMembers from './honorary-members';
+// import * as honorary-members from './honorary-members';
 import * as isaMember from './isa-membership';
 // import * as approvedGear from './approved-gear';
 import * as athleteExellence from './athlete-excellence';
@@ -17,5 +17,5 @@ export const pdfGenerators = {
   generateWorldRecordPDF: worldRecord.generate,
   generateAthleteExellencePDF: athleteExellence.generate,
   // generateContestOrganizerPDF: contestOrganizer.generate,
-  // generateHonoraryMemberPDF: honoraryMembers.generate,
+  // generateHonoraryMemberPDF: honorary-members.generate,
 };

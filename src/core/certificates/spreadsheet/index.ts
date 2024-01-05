@@ -118,7 +118,7 @@ const getWorldRecords = async (filterBy: FilterBy = {}) => {
 };
 
 const getHonoraryMembers = async (filterBy: FilterBy = {}) => {
-  return getCertificates('honoraryMember', ['certId', 'isaId', 'email', 'name', 'date']).then(
+  return getCertificates('honorary-member', ['certId', 'isaId', 'email', 'name', 'date']).then(
     filterCertificates(filterBy),
   );
 };
@@ -176,9 +176,7 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
   promises.push(getRiggers(filterBy).then(addToCertificates('rigger', (r) => r?.level)));
   promises.push(getAthleticAwards(filterBy).then(addToCertificates('athletic-award', (a) => 'Athletic Award')));
   promises.push(
-    getAthleteExcellences(filterBy).then(
-      addToCertificates('athlete-excellence', (a) => 'Athlete Excellence'),
-    ),
+    getAthleteExcellences(filterBy).then(addToCertificates('athlete-excellence', (a) => 'Athlete Excellence')),
   );
   promises.push(
     getContestOrganizers(filterBy).then(
@@ -188,7 +186,7 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
   promises.push(getJudges(filterBy).then(addToCertificates('judge', (j) => `Judge: ${j?.contestName}`)));
   promises.push(getISAMembers(filterBy).then(addToCertificates('isa-membership', (i) => 'ISA Membership')));
   promises.push(getWorldRecords(filterBy).then(addToCertificates('world-record', (w) => `World Record: ${w?.specs}`)));
-  promises.push(getHonoraryMembers(filterBy).then(addToCertificates('honoraryMember', (h) => 'Honorary Member')));
+  promises.push(getHonoraryMembers(filterBy).then(addToCertificates('honorary-member', (h) => 'Honorary Member')));
   promises.push(
     getApprovedGears(filterBy).then(addToCertificates('approved-gear', (g) => `Approved Gear: ${g?.brand}`)),
   );
@@ -266,7 +264,7 @@ const certificateTypeToRange = (certificateType: CertificateType) => {
       return 'ISA Membership';
     case 'world-record':
       return 'World Records';
-    case 'honoraryMember':
+    case 'honorary-member':
       return 'Honorary Members';
     case 'approved-gear':
       return 'Approved Gear';
