@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
-    "incremental": true,
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "ES2021",

@@ -10,6 +10,7 @@ export const listInstructors = async (req: Request) => {
 
   const instructors = await certificateSpreadsheet.getInstructors();
 
+  // s
   const items = instructors
     .map((i) => ({
       email: i.email,

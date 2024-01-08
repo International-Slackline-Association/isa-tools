@@ -59,7 +59,7 @@ export function Verify() {
                 color: 'text.secondary',
               }}
             >
-              This document was issued to <b>{data?.subject}</b> on <b>{data?.issuedAt}</b> and is
+              This document was digitally signed for <b>{data?.subject}</b> on <b>{data?.issuedAt}</b> and is
               valid until <b> {data?.expiresAt}</b>
             </Typography>
           )}
@@ -74,10 +74,8 @@ export function Verify() {
           </Typography>
 
           <Typography variant="body2" color={'text.secondary'} sx={{ fontStyle: 'italic' }}>
-            Above is the verification message of the requested code: &quot;{token.substring(0, 8)}
-            &quot; <br />
-            <br />* Verification confirms that the document was issued by the International
-            Slackline Association. <br /> It uses standard cryptography to prevent forgery.
+            * This verification page confirms that the document was issued by the International Slackline
+            Association. <br /> It uses standard cryptography to prevent forgery.
           </Typography>
         </Stack>
       )}

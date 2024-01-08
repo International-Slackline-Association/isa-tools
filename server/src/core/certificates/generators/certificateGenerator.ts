@@ -57,13 +57,13 @@ const generateInstructor = async (payload: GenerateCertificatePayload) => {
     subject,
     expireDate: endDate.date,
     skipQRCode,
-    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate valid until "${endDate.pretty}"`,
+    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate until "${endDate.pretty}"`,
   });
 
   const pdf = await pdfGenerators.generateInstructorPDF(
     language,
     {
-      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      fullname: `${item.name} ${item.surname}`,
       level: item.level!.toUpperCase(),
       startDate: startDate.formal,
       endDate: endDate.formal,
@@ -84,13 +84,13 @@ const generateRigger = async (payload: GenerateCertificatePayload) => {
     subject,
     expireDate: expireDate.date,
     skipQRCode,
-    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate valid until "${expireDate.pretty}"`,
+    content: `"${item.name} ${item.surname}" has a valid "${item.level}" certificate until "${expireDate.pretty}"`,
   });
 
   const pdf = await pdfGenerators.generateRiggerPDF(
     language,
     {
-      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      fullname: `${item.name} ${item.surname}`,
       level: item.level!.toUpperCase(),
       startDate: startDate.formal,
       endDate: expireDate.formal,
@@ -114,7 +114,7 @@ const generateWorldRecord = async (payload: GenerateCertificatePayload) => {
   const pdf = await pdfGenerators.generateWorldRecordPDF(
     language,
     {
-      name: item.name!.toUpperCase(),
+      name: item.name!,
       specs: item.specs!,
       date: date.formal,
       recordType: item.recordType!,
@@ -146,7 +146,7 @@ const generateAthleticAward = async (payload: GenerateCertificatePayload) => {
       contestSize: item.contestSize!,
       discipline: item.discipline!,
       category: item.category!,
-      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      fullname: `${item.name} ${item.surname}`,
     },
     verificationUrl,
   );
@@ -166,7 +166,7 @@ const generateAthleteExcellenceAward = async (payload: GenerateCertificatePayloa
   const pdf = await pdfGenerators.generateAthleteExellencePDF(
     language,
     {
-      fullname: `${item.name} ${item.surname}`.toUpperCase(),
+      fullname: `${item.name} ${item.surname}`,
       representing: item.representing!,
       year: item.year!,
       rank: item.rank!,
