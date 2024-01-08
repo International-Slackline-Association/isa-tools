@@ -4,6 +4,7 @@ import RIGGER_EN from './templates/rigger-en.pdf';
 import ATHLETIC_AWARD_EN from './templates/athletic-award-en.pdf';
 import ATHLETE_EXCELLENCE from './templates/athlete-excellence-en.pdf';
 import ISA_MEMBER from './templates/isa-member-en.pdf';
+import HONORARY_MEMBER_EN from './templates/honorary-member-en.pdf';
 
 import { CertificateType } from 'core/spreadsheets/types';
 
@@ -21,6 +22,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, language: str
       return ATHLETE_EXCELLENCE;
     case 'isa-membership':
       return ISA_MEMBER;
+    case 'honorary-member':
+      return HONORARY_MEMBER_EN;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }

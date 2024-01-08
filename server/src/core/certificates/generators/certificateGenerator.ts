@@ -38,6 +38,9 @@ export const generateCertificatePDF = async (
     case 'isa-membership':
       pdf = await generateISAMembership(params);
       break;
+    case 'honorary-member':
+      pdf = await generateHonoraryMember(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -200,5 +203,16 @@ const generateISAMembership = async (payload: GenerateCertificatePayload) => {
     },
     verificationUrl,
   );
+  return pdf;
+};
+
+const generateHonoraryMember = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, language } = payload;
+  const item = (await certificateSpreadsheet.getHonoraryMembers({ certId: certificateId }))[0];
+
+  const pdf = await pdfGenerators.generateHonoraryMemberPDF(language, {
+    fullname: item.name!,
+    date: item.date!,
+  });
   return pdf;
 };

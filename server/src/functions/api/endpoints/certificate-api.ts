@@ -32,7 +32,7 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
     'approved-gear': [],
     judge: [],
     'contest-organizer': [],
-    'honorary-member': [],
+    'honorary-member': ['en'],
   };
 
   return { certificates: certs, certificateLanguages };
