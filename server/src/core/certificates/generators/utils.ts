@@ -1,9 +1,22 @@
 import { createSignedDocument, getSignedDocument } from 'core/documentVerification';
 import * as dateFns from 'date-fns';
 
-export const formatCertificateDate = (date: string, formatStr?: string) => {
-  const d = dateFns.parse(date, formatStr || 'dd.MM.yyyy', new Date());
-  return { pretty: dateFns.format(d, 'PPP'), date: d, formal: dateFns.format(d, 'dd.MM.yyyy') };
+export const formatCertificateDate = (
+  date: string | undefined,
+  formatStr?: string,
+  opts: {
+    safeParse?: boolean;
+  } = {},
+) => {
+  try {
+    const d = dateFns.parse(date!, formatStr || 'dd.MM.yyyy', new Date());
+    return { pretty: dateFns.format(d, 'PPP'), date: d, formal: dateFns.format(d, 'dd.MM.yyyy') };
+  } catch (e) {
+    if (opts.safeParse) {
+      return { pretty: 'Unknown', date: new Date(), formal: 'Unknown' };
+    }
+    throw e;
+  }
 };
 
 export const signCertificate = async (payload: {

@@ -18,20 +18,16 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { listingsApi } from 'app/api/listings-api';
+import { AlternatingTableRow } from '../CertifiedInstructors';
 
-export const AlternatingTableRow = styled(TableRow)`
-  &:nth-of-type(even) {
-    background-color: ${() => colors.grey[200]};
-  }
-`;
 
-export function CertifiedInstructors() {
-  const { data, isFetching } = listingsApi.useGetInstructorsListQuery();
+export function CertifiedRiggers() {
+  const { data, isFetching } = listingsApi.useGetRiggerListQuery();
 
   return (
     <Stack spacing={2}>
       <Typography textAlign={'left'} variant="body2Bold">
-        List of instructors certified by ISA
+        List of riggers certified by ISA
       </Typography>
       {isFetching ? (
         <CircularProgress />
@@ -43,7 +39,6 @@ export function CertifiedInstructors() {
                 <TableCell>Email</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Country</TableCell>
-                <TableCell>Level</TableCell>
                 <TableCell>Expiration Date</TableCell>
               </TableRow>
             </TableHead>
@@ -55,7 +50,6 @@ export function CertifiedInstructors() {
                   </TableCell>
                   <TableCell>{row.name?.substring(0, 50)}</TableCell>
                   <TableCell>{row.country?.substring(0, 20)}</TableCell>
-                  <TableCell>{row.level}</TableCell>
                   <TableCell>{row.expirationDate}</TableCell>
                 </AlternatingTableRow>
               ))}

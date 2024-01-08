@@ -32,4 +32,38 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
       },
     },
   },
+  WebAppS3Bucket: {
+    Type: 'AWS::S3::Bucket',
+    Properties: {
+      BucketName: 'isa-documents-ui-${sls:stage}',
+    },
+  },
+  WebAppS3BucketPolicy: {
+    Type: 'AWS::S3::BucketPolicy',
+    Properties: {
+      Bucket: {
+        Ref: 'WebAppS3Bucket',
+      },
+      PolicyDocument: {
+        Version: '2008-10-17',
+        Id: 'PolicyForCloudFrontPrivateContent',
+        Statement: [
+          {
+            Sid: 'AllowCloudFrontServicePrincipal',
+            Effect: 'Allow',
+            Principal: {
+              Service: 'cloudfront.amazonaws.com',
+            },
+            Action: 's3:GetObject',
+            Resource: 'arn:aws:s3:::isa-documents-ui-prod/*',
+            Condition: {
+              StringEquals: {
+                'AWS:SourceArn': 'arn:aws:cloudfront::387132903656:distribution/E22IDS9URBBBCU',
+              },
+            },
+          },
+        ],
+      },
+    },
+  },
 };

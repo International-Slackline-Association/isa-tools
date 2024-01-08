@@ -8,10 +8,9 @@ export const injectCommonlyUsedHeadersMiddleware = async (req: Request, _res: Re
   if (req.headers['x-api-key'] === process.env.ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY) {
     req.includesTrustedApiKey = true;
   }
-  if (
-    req.headers['host']?.includes('slacklineinternational.org') ||
-    req.headers['origin']?.includes('slacklineinternational.org')
-  ) {
+
+  const origin = req.headers['origin'];
+  if (origin?.includes('slacklineinternational.org') || origin?.includes('localhost')) {
     req.isFromTrustedDomain = true;
   }
 

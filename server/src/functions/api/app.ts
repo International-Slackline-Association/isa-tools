@@ -3,6 +3,7 @@ import cors from 'cors';
 import { certificateApi } from './endpoints/certificate-api';
 import { errorMiddleware, injectCommonlyUsedHeadersMiddleware, notFoundMiddleware } from './middlewares';
 import { signApi } from './endpoints/sign-api';
+import { listingsApi } from './endpoints/listings-api';
 
 const app = express();
 
@@ -18,8 +19,8 @@ const setupExpressApp = (app: Express) => {
 
 const setupRoutes = (app: Express) => {
   app.use('/certificate', certificateApi);
+  app.use('/list', listingsApi);
   app.use('/sign', signApi);
-
 };
 
 const registerStartingMiddlewares = (app: Express) => {

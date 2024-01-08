@@ -1,6 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
-import { CertificateType } from '../types';
-import { certificateSpreadsheet } from '../spreadsheet';
+import { CertificateType } from '../../spreadsheets/types';
+import { certificateSpreadsheet } from '../../spreadsheets/certificates';
 import { pdfGenerators } from './pdfGenerators';
 import { formatCertificateDate, signCertificate } from './utils';
 

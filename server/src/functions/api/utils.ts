@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
 import { z, ZodError, ZodType, ZodTypeAny } from 'zod';
 
-export const catchExpressJsErrorWrapper = (
-  f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>,
-) => {
+export const wrapEndpoint = (f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>) => {
   return (req: Request, res: Response, next: any) => {
-    f(req, res, next).catch(next);
+    f(req, res, next)
+      .then((result) => {
+        if (typeof result === 'object') {
+          res.json(result);
+        }
+      })
+      .catch(next);
   };
+};
+
+export const jsonResponse = (res: Response, data: any) => {
+  res.json(data);
 };
 
 export const validateApiPayload = <T extends ZodTypeAny>(payload: unknown, schema: T): z.infer<T> => {
@@ -27,7 +35,7 @@ export const verifyTrustedServiceRequest = (req: Request) => {
 };
 
 export const verifyTrustedDomainRequest = (req: Request) => {
-  if (!req.isFromTrustedDomain) {
+  if (!req.isFromTrustedDomain && !req.includesTrustedApiKey) {
     throw new Error('Unauthorized');
   }
 };

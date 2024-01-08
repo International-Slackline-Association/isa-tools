@@ -6,8 +6,9 @@
     "lint": "eslint .",
     "prettifyAll": "prettier --write '{src,test}/**/*.ts'",
     "checkTs": "tsc --noEmit",
+    "build": "tsc --build",
     "package": "serverless package",
-    "deploy": "serverless deploy --verbose",
+    "deploy": "npm run build && serverless deploy --verbose",
     "deploy:api": "serverless deploy function -f api",
     "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi",
     "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose"

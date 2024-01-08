@@ -40,17 +40,16 @@ export const createSignedDocument = async (document: {
     hash = hashItem.hash;
   }
   return {
-    hash,
-    token,
-    verificationUrl: generateVerificationUrl(hash, token),
+    token: hash || token,
+    verificationUrl: `https://docs.slacklineinternational.org/verify?token=${hash || token}`,
     expiresAt: dateFns.addSeconds(new Date(), expiresInSeconds).toISOString(),
   };
 };
 
-export const getSignedDocument = async (id?: string, token?: string) => {
+export const getSignedDocument = async (token: string) => {
   let signedContent = token;
-  if (id) {
-    const hash = await getHash(id);
+  if (token?.length <= 8) {
+    const hash = await getHash(token);
     if (!hash) {
       throw new Error('NotFound');
     }
@@ -76,15 +75,4 @@ export const getSignedDocument = async (id?: string, token?: string) => {
     }
     throw new Error('Invalid');
   }
-};
-
-const generateVerificationUrl = (hash?: string, token?: string) => {
-  const base = 'https://verify.slacklineinternational.org/document';
-  if (hash) {
-    return `${base}?hash=${hash}`;
-  }
-  if (token) {
-    return `${base}?token=${token}`;
-  }
-  throw new Error('Invalid verification url');
 };

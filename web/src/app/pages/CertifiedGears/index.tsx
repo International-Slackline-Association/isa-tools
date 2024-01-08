@@ -16,22 +16,19 @@ import {
   MenuItem,
   Select,
   CircularProgress,
+  Button,
+  Link,
 } from '@mui/material';
 import { listingsApi } from 'app/api/listings-api';
+import { AlternatingTableRow } from '../CertifiedInstructors';
 
-export const AlternatingTableRow = styled(TableRow)`
-  &:nth-of-type(even) {
-    background-color: ${() => colors.grey[200]};
-  }
-`;
-
-export function CertifiedInstructors() {
-  const { data, isFetching } = listingsApi.useGetInstructorsListQuery();
+export function CertifiedGears() {
+  const { data, isFetching } = listingsApi.useGetCertifiedGearsQuery();
 
   return (
     <Stack spacing={2}>
       <Typography textAlign={'left'} variant="body2Bold">
-        List of instructors certified by ISA
+        List of gears certified by ISA
       </Typography>
       {isFetching ? (
         <CircularProgress />
@@ -41,10 +38,10 @@ export function CertifiedInstructors() {
             <TableHead>
               <TableRow>
                 <TableCell>Email</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>Level</TableCell>
-                <TableCell>Expiration Date</TableCell>
+                <TableCell>Brand</TableCell>
+                <TableCell>Model</TableCell>
+                <TableCell>Standard</TableCell>
+                <TableCell>Product Link</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -53,10 +50,12 @@ export function CertifiedInstructors() {
                   <TableCell>
                     <a href={`mailto:${row.email}`}>Contact</a>
                   </TableCell>
-                  <TableCell>{row.name?.substring(0, 50)}</TableCell>
-                  <TableCell>{row.country?.substring(0, 20)}</TableCell>
-                  <TableCell>{row.level}</TableCell>
-                  <TableCell>{row.expirationDate}</TableCell>
+                  <TableCell>{row.brand}</TableCell>
+                  <TableCell>{row.modelName}</TableCell>
+                  <TableCell>{row.standard}</TableCell>
+                  <TableCell>
+                    <Link href={row.productLink}>Product Link</Link>
+                  </TableCell>
                 </AlternatingTableRow>
               ))}
             </TableBody>

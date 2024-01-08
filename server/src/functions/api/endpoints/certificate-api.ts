@@ -1,11 +1,6 @@
 import express, { Request, Response } from 'express';
-import {
-  catchExpressJsErrorWrapper,
-  validateApiPayload,
-  verifyTrustedDomainRequest,
-  verifyTrustedServiceRequest,
-} from '../utils';
-import { certificateSpreadsheet } from 'core/certificates/spreadsheet';
+import { wrapEndpoint, validateApiPayload, verifyTrustedDomainRequest, verifyTrustedServiceRequest } from '../utils';
+import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
 import {
   GenerateCertificatePostBody,
   ListCertificatesQueryParams,
@@ -13,10 +8,11 @@ import {
   listCertificatesQueryParamsSchema,
 } from './schema';
 import { generateCertificatePDF } from 'core/certificates/generators/certificateGenerator';
-import { CertificateType } from 'core/certificates/types';
+import { CertificateType } from 'core/spreadsheets/types';
 import { uploadPDFToS3 } from 'core/aws/s3';
+import { formatCertificateDate } from 'core/certificates/generators/utils';
 
-const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>, res: Response) => {
+const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>) => {
   verifyTrustedDomainRequest(req);
 
   const query = validateApiPayload(req.query, listCertificatesQueryParamsSchema);
@@ -39,7 +35,7 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
     'honorary-member': [],
   };
 
-  res.json({ certificates: certs, certificateLanguages });
+  return { certificates: certs, certificateLanguages };
 };
 
 const generateCertificate = async (req: Request<any, any, GenerateCertificatePostBody>, res: Response) => {
@@ -57,9 +53,9 @@ const generateCertificate = async (req: Request<any, any, GenerateCertificatePos
   const buffer = Buffer.from(pdfBytes);
   const { presignedUrl } = await uploadPDFToS3(`certificates/${body.certificateId}-${body.language}.pdf`, buffer);
 
-  res.json({ pdfUrl: presignedUrl, certificateId: body.certificateId });
+  return { pdfUrl: presignedUrl, certificateId: body.certificateId };
 };
 
 export const certificateApi = express.Router();
-certificateApi.get('/', catchExpressJsErrorWrapper(listCertificates));
-certificateApi.post('/generate', catchExpressJsErrorWrapper(generateCertificate));
+certificateApi.get('/', wrapEndpoint(listCertificates));
+certificateApi.post('/generate', wrapEndpoint(generateCertificate));

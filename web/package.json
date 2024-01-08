@@ -7,7 +7,8 @@
     "start": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext js,ts,tsx --fix"
+    "lint": "eslint --ext js,ts,tsx --fix",
+    "deploy": "env-cmd -f .env --use-shell 'npm run build && sh ./internals/deployToS3.sh'"
   },
   "dependencies": {
     "@emotion/react": "11.11.3",
@@ -35,10 +36,12 @@
     "@typescript-eslint/eslint-plugin": "6.18.0",
     "@typescript-eslint/parser": "6.18.0",
     "@vitejs/plugin-react": "4.2.1",
+    "env-cmd": "10.1.0",
     "eslint": "8.56.0",
     "eslint-plugin-react": "7.33.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "prettier": "3.1.1",
+    "type-fest": "4.9.0",
     "typescript": "5.3.3",
     "vite": "5.0.11"
   },

@@ -1,5 +1,5 @@
-import { CertificateType } from '../types';
-import { getSpreadsheetValues, initSpreadsheets } from './spreadsheet';
+import { CertificateType } from './types';
+import { getSpreadsheetValues, initSpreadsheets } from './utils';
 
 type FilterBy = {
   isaId?: string;
@@ -197,38 +197,7 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
 
 const getCertificates = async <T extends string>(certificateType: CertificateType, obj: T[]) => {
   const range = certificateTypeToRange(certificateType);
-  const valueRanges = await getSpreadsheetValues(range);
-  const data: { [key in T]: string | undefined }[] = [];
-
-  if (!valueRanges) {
-    return data;
-  }
-
-  for (const valueRange of valueRanges) {
-    const range = valueRange.range;
-    const rangeData = valueRange.values;
-
-    const headers = rangeData?.[0] ?? [];
-    const rows = rangeData?.slice(1) ?? [];
-    for (const row of rows) {
-      const v: { [key in T]: string | undefined } = {} as any;
-      for (let i = 0; i < obj.length; i++) {
-        const fieldName = obj[i];
-        let rowValue = row[i]?.trim() as string | undefined;
-        if (!rowValue) {
-          continue;
-        }
-        if (fieldName.toLowerCase().includes('date')) {
-          rowValue = rowValue?.toLowerCase();
-        }
-        if (['isaId', 'email'].includes(fieldName)) {
-          rowValue = rowValue?.toLowerCase();
-        }
-        v[fieldName] = rowValue;
-      }
-      data.push(v);
-    }
-  }
+  const data = await getSpreadsheetValues(range, 'certificates', obj);
   return data;
 };
 

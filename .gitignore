@@ -13,3 +13,4 @@ dist
 *.DS_Store
 
 !**/SharpLayer/**/node_modules
+server/lib

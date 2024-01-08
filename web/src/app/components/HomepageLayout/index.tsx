@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
 import { Breadcrumbs, Divider, Link, Typography } from '@mui/material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { homepageItems } from 'app/pages/Homepage';
 
 const drawerWidth = 240;
 
@@ -12,9 +13,10 @@ interface Props {
 
 const LinkRouter = (props: any) => <Link {...props} component={RouterLink} />;
 
-const breadcrumbNameMap: { [key: string]: string } = {
-  '/certified-instructors': 'Certified Instructors',
-};
+const breadcrumbNameMap = homepageItems.reduce((acc, item) => {
+  acc[item.route] = item.title;
+  return acc;
+}, {});
 
 export const HomepageLayout = (props: Props) => {
   const { children } = props;
@@ -23,6 +25,7 @@ export const HomepageLayout = (props: Props) => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
+    
     <Stack
       direction={'column'}
       spacing={2}
@@ -36,11 +39,11 @@ export const HomepageLayout = (props: Props) => {
       <img
         style={{ maxWidth: '100%', height: '80px' }}
         src={'/images/isa-logo-wide.svg'}
-        alt="Slackmap Logo"
+        alt="ISA Logo"
       />
       <Typography variant="h4">Slackline International Docs</Typography>
       <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-        The <b>official</b> lists, sheets, and digital documents from ISA
+        The <b>official</b> lists, sheets, and digital documents from the ISA
       </Typography>
       <Box
         sx={{
@@ -58,7 +61,7 @@ export const HomepageLayout = (props: Props) => {
             const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
             return last ? (
-              <Typography variant='body2Bold' color="text.primary" key={to}>
+              <Typography variant="body2Bold" color="text.primary" key={to}>
                 {breadcrumbNameMap[to]}
               </Typography>
             ) : (
@@ -69,7 +72,6 @@ export const HomepageLayout = (props: Props) => {
           })}
         </Breadcrumbs>
         <Link
-          underline="hover"
           color="text.primary"
           href={`mailto:${'info@slacklineinternational.org'}?subject=${encodeURIComponent(
             'ISA Docs Contact',

@@ -5,7 +5,7 @@ import ATHLETIC_AWARD_EN from './templates/athletic-award-en.pdf';
 import ATHLETE_EXCELLENCE from './templates/athlete-excellence-en.pdf';
 import ISA_MEMBER from './templates/isa-member-en.pdf';
 
-import { CertificateType } from 'core/certificates/types';
+import { CertificateType } from 'core/spreadsheets/types';
 
 export const blankPDFTemplate = (certificateType: CertificateType, language: string) => {
   switch (certificateType) {
