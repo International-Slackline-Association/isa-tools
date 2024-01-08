@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/system';
 import { Breadcrumbs, Divider, Link, Typography } from '@mui/material';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation, useSearchParams } from 'react-router-dom';
 import { homepageItems } from 'app/pages/Homepage';
 
 const drawerWidth = 240;
@@ -22,18 +22,39 @@ export const HomepageLayout = (props: Props) => {
   const { children } = props;
 
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const isEmbeddedlayout = searchParams.get('layout') === 'embed';
+
   const pathnames = location.pathname.split('/').filter((x) => x);
 
-  return (
-    
+  const MainContent = () => (
+    <Box
+      component="main"
+      sx={{
+        width: '100%',
+        p: isEmbeddedlayout ? 2 : 0,
+        height: isEmbeddedlayout ? '100vh' : '100%',
+        alignItems: 'center',
+        textAlign: 'center',
+      }}
+    >
+      {children}
+    </Box>
+  );
+
+  return isEmbeddedlayout ? (
+    <MainContent />
+  ) : (
     <Stack
       direction={'column'}
       spacing={2}
       sx={{
-        mx: { xs: 4, lg: 24 },
-        my: { xs: 1, lg: 4 },
+        px: { xs: 4, lg: 24 },
+        py: { xs: 1, lg: 4 },
         alignItems: 'center',
         textAlign: 'center',
+        height: '100vh',
       }}
     >
       <img
@@ -82,15 +103,7 @@ export const HomepageLayout = (props: Props) => {
       </Box>
 
       <Divider flexItem />
-      <Box
-        component="main"
-        sx={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        {children}
-      </Box>
+      <MainContent />
     </Stack>
   );
 };
