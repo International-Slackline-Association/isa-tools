@@ -216,3 +216,4 @@ const generateHonoraryMember = async (payload: GenerateCertificatePayload) => {
   });
   return pdf;
 };
+

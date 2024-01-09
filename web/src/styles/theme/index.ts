@@ -15,7 +15,7 @@ export const theme: Theme = responsiveFontSizes(
       },
     },
     typography: {
-      fontFamily: 'Lato',
+      fontFamily: 'Lato, sans-serif',
       body2Bold: {
         fontWeight: 'bold',
         letterSpacing: -0.08,

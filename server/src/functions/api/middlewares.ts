@@ -10,7 +10,7 @@ export const injectCommonlyUsedHeadersMiddleware = async (req: Request, _res: Re
   }
 
   const origin = req.headers['origin'];
-  if (origin?.includes('slacklineinternational.org') || origin?.includes('localhost')) {
+  if (origin?.includes('dyd759auoxhjr.cloudfront.net') || origin?.includes('localhost')) {
     req.isFromTrustedDomain = true;
   }
 

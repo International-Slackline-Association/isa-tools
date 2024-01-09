@@ -20,7 +20,6 @@ import {
 import { listingsApi } from 'app/api/listings-api';
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
-
 export function CertifiedRiggers() {
   const { data, isFetching } = listingsApi.useGetRiggerListQuery();
 
@@ -32,7 +31,12 @@ export function CertifiedRiggers() {
       {isFetching ? (
         <CircularProgress />
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            backgroundColor: 'transparent',
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow>

@@ -11,6 +11,7 @@
     "deploy": "npm run build && serverless deploy --verbose",
     "deploy:api": "serverless deploy function -f api",
     "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi",
+    "deploy:prerender": "aws cloudformation deploy --template-file misc/prerender-cloudformation.yaml --stack-name Prerender --capabilities CAPABILITY_IAM --region=us-east-1 --parameter-overrides PrerenderToken=fE4XxQzGelPlja0KVTna",
     "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose"
   },
   "engines": {

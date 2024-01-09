@@ -41,7 +41,7 @@ export const createSignedDocument = async (document: {
   }
   return {
     token: hash || token,
-    verificationUrl: `https://docs.slacklineinternational.org/verify?token=${hash || token}`,
+    verificationUrl: `https://verify.slacklineinternational.org/?token=${hash || token}`,
     expiresAt: dateFns.addSeconds(new Date(), expiresInSeconds).toISOString(),
   };
 };

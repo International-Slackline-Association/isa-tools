@@ -33,7 +33,12 @@ export function CertifiedGears() {
       {isFetching ? (
         <CircularProgress />
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            backgroundColor: 'transparent',
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow>
