@@ -1,7 +1,8 @@
 import { PDFDocument } from 'pdf-lib';
-import { PDFModificationsObject } from './types';
-import { loadPDFTemplate, black, convertToYCoordinate, embedQRCodeToPDF } from './utils';
+
 import { blankPDFTemplate } from './templates';
+import { PDFModificationsObject } from './types';
+import { black, convertToYCoordinate, embedQRCodeToPDF, loadPDFTemplate } from './utils';
 
 interface Props {
   fullname: string;
@@ -10,7 +11,11 @@ interface Props {
   endDate: string;
 }
 
-export async function generate(language: string, data: Props, qrCodeUrl?: string): Promise<PDFDocument> {
+export async function generate(
+  language: string,
+  data: Props,
+  qrCodeUrl?: string,
+): Promise<PDFDocument> {
   const blankPDF = blankPDFTemplate('rigger', language);
 
   const { boldFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont, berkshireFont } =

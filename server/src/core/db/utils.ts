@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  ConvertKeysToInterface,
+  DDBTableKeyAttrs,
+  DDBTableRequiredKeyAttrs,
+  TransformerParams,
+} from 'core/db/types';
 import cloneDeep from 'lodash.clonedeep';
-import { ConvertKeysToInterface, DDBTableKeyAttrs, DDBTableRequiredKeyAttrs, TransformerParams } from 'core/db/types';
 
 export const TABLE_NAME = process.env.ISA_DOCUMENTS_TABLE_NAME as string;
 
@@ -32,14 +38,16 @@ export const transformUtils = <
 
   const key = (params: Partial<Omit<DDBItem, keyof DDBAttrs>>) => {
     if (keyUtils.PK.compose && keyUtils.SK_GSI.compose) {
-      return { PK: keyUtils.PK.compose(params || {}), SK_GSI: keyUtils.SK_GSI.compose(params || {}) };
+      return {
+        PK: keyUtils.PK.compose(params || {}),
+        SK_GSI: keyUtils.SK_GSI.compose(params || {}),
+      };
     } else {
       throw new Error('Missing PK or SK_GSI compose function');
     }
   };
 
   const attrsToItem = (attrs: DDBAttrs): DDBItem => {
-    type DDBItemWithoutKeys = Omit<DDBItem, keyof DDBAttrs>;
     const { PK, SK_GSI, LSI, GSI_SK, GSI2, GSI2_SK, LSI2, ...rest } = attrs;
     const item = { ...rest } as DDBItem;
     for (const [key, value] of Object.entries(keyUtils)) {

@@ -1,8 +1,9 @@
-import { ssm } from 'core/aws/clients';
-import jwt, { SignOptions } from 'jsonwebtoken';
-import { documentVerificationPublicKey } from './verificationPublicKey';
 import { GetParametersCommand } from '@aws-sdk/client-ssm';
+import { ssm } from 'core/aws/clients';
 import { createHash } from 'crypto';
+import jwt, { SignOptions } from 'jsonwebtoken';
+
+import { documentVerificationPublicKey } from './verificationPublicKey';
 
 const jwtSecretSSMParameter = 'isa-documents-rsa-private-key';
 

@@ -1,25 +1,19 @@
 import {
-  TableContainer,
+  CircularProgress,
+  Link,
   Paper,
+  Stack,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  styled,
   Typography,
-  colors,
-  Stack,
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  CircularProgress,
-  Button,
-  Link,
 } from '@mui/material';
+
 import { listingsApi } from 'app/api/listings-api';
+
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
 export function CertifiedGears() {

@@ -1,5 +1,8 @@
-import type { CloudWatchLogsDecodedData, CloudWatchLogsEvent, CloudWatchLogsHandler } from 'aws-lambda';
-
+import type {
+  CloudWatchLogsDecodedData,
+  CloudWatchLogsEvent,
+  CloudWatchLogsHandler,
+} from 'aws-lambda';
 import { writeLogs } from 'core/utils/logger/cloudwatch';
 import { LogObject } from 'core/utils/logger/types';
 import { gunzipSync } from 'zlib';

@@ -2,12 +2,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { baseApi, rtkQueryErrorLogger } from './rtk-query';
-import { StaticReducersType } from './types';
 import { appState } from './state';
+import { StaticReducersType } from './types';
 
 const staticReducers: StaticReducersType = {
   api: baseApi.reducer,
-  app: appState.reducer
+  app: appState.reducer,
 };
 
 export function configureAppStore() {
@@ -21,7 +21,6 @@ export function configureAppStore() {
   setupListeners(store.dispatch);
   return store;
 }
-
 
 const createReducer = (staticReducers: StaticReducersType) => {
   if (Object.keys(staticReducers).length === 0) {

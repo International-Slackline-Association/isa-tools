@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { z, ZodError, ZodType, ZodTypeAny } from 'zod';
+import { ZodError, ZodTypeAny, z } from 'zod';
 
 export const catchExpressJsErrorWrapper = (
   f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>,
@@ -9,7 +9,10 @@ export const catchExpressJsErrorWrapper = (
   };
 };
 
-export const validateApiPayload = <T extends ZodTypeAny>(payload: unknown, schema: T): z.infer<T> => {
+export const validateApiPayload = <T extends ZodTypeAny>(
+  payload: unknown,
+  schema: T,
+): z.infer<T> => {
   try {
     return schema.parse(payload);
   } catch (error) {

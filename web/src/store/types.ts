@@ -1,4 +1,5 @@
-import { Reducer, Action } from '@reduxjs/toolkit';
+import { Action, Reducer } from '@reduxjs/toolkit';
+
 import { AppState } from './state/types';
 
 type RequiredKeys<T> = {

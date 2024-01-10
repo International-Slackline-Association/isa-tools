@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express';
-import { wrapEndpoint, validateApiPayload, verifyTrustedDomainRequest, verifyTrustedServiceRequest } from '../utils';
-import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
-
 import { formatCertificateDate } from 'core/certificates/generators/utils';
+import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
 import { getEquipmentWarnings } from 'core/spreadsheets/equipment-warnings';
+import express, { Request } from 'express';
+
+import { verifyTrustedDomainRequest, wrapEndpoint } from '../utils';
 
 export const listInstructors = async (req: Request) => {
   verifyTrustedDomainRequest(req);

@@ -1,8 +1,8 @@
+import * as dateFns from 'date-fns';
 import { getHash, putHash } from 'core/db/genericHash';
 import { DDBGenericHashItem } from 'core/db/genericHash/types';
 import { hashValue, signJWT, verifyJWT } from 'core/documentVerification/crypto';
 import { JwtPayload } from 'jsonwebtoken';
-import * as dateFns from 'date-fns';
 
 export interface VerifiableDocumentPayload {
   content: string;

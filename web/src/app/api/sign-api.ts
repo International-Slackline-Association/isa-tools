@@ -1,6 +1,6 @@
+import { verifySignedDocument } from '@server/functions/api/endpoints/sign-api';
 import { baseApi } from 'store/rtk-query';
 import { AsyncReturnType } from 'type-fest';
-import { verifySignedDocument } from '@server/functions/api/endpoints/sign-api';
 
 export const signApi = baseApi
   .enhanceEndpoints({

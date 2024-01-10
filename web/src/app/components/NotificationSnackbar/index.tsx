@@ -1,4 +1,5 @@
 import { Alert, Snackbar } from '@mui/material';
+
 import { SnackbarNotification } from 'store/state/types';
 
 interface Props {

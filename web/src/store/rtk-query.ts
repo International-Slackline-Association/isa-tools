@@ -1,4 +1,4 @@
-import { isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { Middleware, MiddlewareAPI, isRejectedWithValue } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { showErrorNotification } from 'utils';
 
@@ -14,12 +14,13 @@ export const baseApi = createApi({
   endpoints: () => ({}),
 });
 
-export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) => (action: any) => {
-  // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
-  if (isRejectedWithValue(action)) {
-    const message = `Error: ${action?.payload?.data?.message || action?.error?.message}`;
-    api.dispatch(showErrorNotification(message));
-  }
+export const rtkQueryErrorLogger: Middleware =
+  (api: MiddlewareAPI) => (next: any) => (action: any) => {
+    // RTK Query uses `createAsyncThunk` from redux-toolkit under the hood, so we're able to utilize these matchers!
+    if (isRejectedWithValue(action)) {
+      const message = `Error: ${action?.payload?.data?.message || action?.error?.message}`;
+      api.dispatch(showErrorNotification(message));
+    }
 
-  return next(action);
-};
+    return next(action);
+  };

@@ -57,6 +57,8 @@ export type TransformerParams<T, U> = {
   };
 };
 
-export type ConvertKeysToInterface<T extends readonly (keyof DDBTableKeyAttrs)[]> = { [key in T[number]]: any };
+export type ConvertKeysToInterface<T extends readonly (keyof DDBTableKeyAttrs)[]> = {
+  [key in T[number]]: any;
+};
 
 export type DDBAttributeItem = Record<string, NativeAttributeValue>;

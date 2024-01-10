@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express';
-import { wrapEndpoint, validateApiPayload, verifyTrustedServiceRequest } from '../utils';
-import { SignDocumentePostBody, signDocumentPostBodySchema } from './schema';
 import * as dateFns from 'date-fns';
-
 import { createSignedDocument, getSignedDocument } from 'core/documentVerification';
+import express, { Request } from 'express';
+
+import { validateApiPayload, verifyTrustedServiceRequest, wrapEndpoint } from '../utils';
+import { SignDocumentePostBody, signDocumentPostBodySchema } from './schema';
 
 const sign = async (req: Request<any, any, SignDocumentePostBody>) => {
   verifyTrustedServiceRequest(req);
@@ -26,6 +26,8 @@ const sign = async (req: Request<any, any, SignDocumentePostBody>) => {
 
 export const verifySignedDocument = async (req: Request) => {
   const code = req.query.token as string;
+  if (!code) throw new Error('No token provided');
+
   try {
     const document = await getSignedDocument(code);
     return {

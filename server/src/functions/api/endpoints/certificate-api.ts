@@ -1,16 +1,21 @@
-import express, { Request, Response } from 'express';
-import { wrapEndpoint, validateApiPayload, verifyTrustedDomainRequest, verifyTrustedServiceRequest } from '../utils';
+import { uploadPDFToS3 } from 'core/aws/s3';
+import { generateCertificatePDF } from 'core/certificates/generators/certificateGenerator';
 import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
+import { CertificateType } from 'core/spreadsheets/types';
+import express, { Request, Response } from 'express';
+
+import {
+  validateApiPayload,
+  verifyTrustedDomainRequest,
+  verifyTrustedServiceRequest,
+  wrapEndpoint,
+} from '../utils';
 import {
   GenerateCertificatePostBody,
   ListCertificatesQueryParams,
   generateCertificatePostBodySchema,
   listCertificatesQueryParamsSchema,
 } from './schema';
-import { generateCertificatePDF } from 'core/certificates/generators/certificateGenerator';
-import { CertificateType } from 'core/spreadsheets/types';
-import { uploadPDFToS3 } from 'core/aws/s3';
-import { formatCertificateDate } from 'core/certificates/generators/utils';
 
 const listCertificates = async (req: Request<any, any, any, ListCertificatesQueryParams>) => {
   verifyTrustedDomainRequest(req);
@@ -38,7 +43,10 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
   return { certificates: certs, certificateLanguages };
 };
 
-const generateCertificate = async (req: Request<any, any, GenerateCertificatePostBody>, res: Response) => {
+const generateCertificate = async (
+  req: Request<any, any, GenerateCertificatePostBody>,
+  _res: Response,
+) => {
   verifyTrustedServiceRequest(req);
 
   const body = validateApiPayload(req.body, generateCertificatePostBodySchema);
@@ -51,7 +59,10 @@ const generateCertificate = async (req: Request<any, any, GenerateCertificatePos
   });
 
   const buffer = Buffer.from(pdfBytes);
-  const { presignedUrl } = await uploadPDFToS3(`certificates/${body.certificateId}-${body.language}.pdf`, buffer);
+  const { presignedUrl } = await uploadPDFToS3(
+    `certificates/${body.certificateId}-${body.language}.pdf`,
+    buffer,
+  );
 
   return { pdfUrl: presignedUrl, certificateId: body.certificateId };
 };

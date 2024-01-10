@@ -1,5 +1,6 @@
 import winston from 'winston';
-import { JsonObject, LoggerConfig, LoggerMeta, LogLevel, LogObject } from './types';
+
+import { JsonObject, LogLevel, LogObject, LoggerConfig, LoggerMeta } from './types';
 
 export class Logger {
   private winstonLogger: winston.Logger;

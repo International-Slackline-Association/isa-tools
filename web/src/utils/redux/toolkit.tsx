@@ -1,9 +1,8 @@
 import {
-  createSlice as createSliceOriginal,
-  SliceCaseReducers,
   CreateSliceOptions,
+  SliceCaseReducers,
+  createSlice as createSliceOriginal,
 } from '@reduxjs/toolkit';
-
 import { RootStateKeyType } from 'store/types';
 
 /* Wrap createSlice with stricter Name options */

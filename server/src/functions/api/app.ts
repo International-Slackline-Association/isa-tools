@@ -1,9 +1,14 @@
-import { default as express, Express, urlencoded, json } from 'express';
 import cors from 'cors';
+import { Express, default as express, json, urlencoded } from 'express';
+
 import { certificateApi } from './endpoints/certificate-api';
-import { errorMiddleware, injectCommonlyUsedHeadersMiddleware, notFoundMiddleware } from './middlewares';
-import { signApi } from './endpoints/sign-api';
 import { listingsApi } from './endpoints/listings-api';
+import { signApi } from './endpoints/sign-api';
+import {
+  errorMiddleware,
+  injectCommonlyUsedHeadersMiddleware,
+  notFoundMiddleware,
+} from './middlewares';
 
 const app = express();
 

@@ -99,9 +99,15 @@ const getJudges = async (filterBy: FilterBy = {}) => {
 };
 
 const getISAMembers = async (filterBy: FilterBy = {}) => {
-  return getCertificates('isa-membership', ['certId', 'isaId', 'email', 'membership', 'name', 'date', 'location']).then(
-    filterCertificates(filterBy),
-  );
+  return getCertificates('isa-membership', [
+    'certId',
+    'isaId',
+    'email',
+    'membership',
+    'name',
+    'date',
+    'location',
+  ]).then(filterCertificates(filterBy));
 };
 
 const getWorldRecords = async (filterBy: FilterBy = {}) => {
@@ -174,21 +180,39 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
 
   promises.push(getInstructors(filterBy).then(addToCertificates('instructor', (i) => i?.level)));
   promises.push(getRiggers(filterBy).then(addToCertificates('rigger', (r) => r?.level)));
-  promises.push(getAthleticAwards(filterBy).then(addToCertificates('athletic-award', (a) => 'Athletic Award')));
   promises.push(
-    getAthleteExcellences(filterBy).then(addToCertificates('athlete-excellence', (a) => 'Athlete Excellence')),
+    getAthleticAwards(filterBy).then(addToCertificates('athletic-award', () => 'Athletic Award')),
+  );
+  promises.push(
+    getAthleteExcellences(filterBy).then(
+      addToCertificates('athlete-excellence', () => 'Athlete Excellence'),
+    ),
   );
   promises.push(
     getContestOrganizers(filterBy).then(
       addToCertificates('contest-organizer', (c) => `Contest Organizer: ${c?.contestName}`),
     ),
   );
-  promises.push(getJudges(filterBy).then(addToCertificates('judge', (j) => `Judge: ${j?.contestName}`)));
-  promises.push(getISAMembers(filterBy).then(addToCertificates('isa-membership', (i) => 'ISA Membership')));
-  promises.push(getWorldRecords(filterBy).then(addToCertificates('world-record', (w) => `World Record: ${w?.specs}`)));
-  promises.push(getHonoraryMembers(filterBy).then(addToCertificates('honorary-member', (h) => 'Honorary Member')));
   promises.push(
-    getApprovedGears(filterBy).then(addToCertificates('approved-gear', (g) => `Approved Gear: ${g?.brand}`)),
+    getJudges(filterBy).then(addToCertificates('judge', (j) => `Judge: ${j?.contestName}`)),
+  );
+  promises.push(
+    getISAMembers(filterBy).then(addToCertificates('isa-membership', () => 'ISA Membership')),
+  );
+  promises.push(
+    getWorldRecords(filterBy).then(
+      addToCertificates('world-record', (w) => `World Record: ${w?.specs}`),
+    ),
+  );
+  promises.push(
+    getHonoraryMembers(filterBy).then(
+      addToCertificates('honorary-member', () => 'Honorary Member'),
+    ),
+  );
+  promises.push(
+    getApprovedGears(filterBy).then(
+      addToCertificates('approved-gear', (g) => `Approved Gear: ${g?.brand}`),
+    ),
   );
 
   await Promise.all(promises);
@@ -201,7 +225,9 @@ const getCertificates = async <T extends string>(certificateType: CertificateTyp
   return data;
 };
 
-const filterCertificates = <T extends { isaId?: string; email?: string; certId?: string }>(filterBy: FilterBy = {}) => {
+const filterCertificates = <T extends { isaId?: string; email?: string; certId?: string }>(
+  filterBy: FilterBy = {},
+) => {
   return (certificates: T[]) =>
     certificates.filter((certificate) => {
       const id = filterBy.isaId?.toLowerCase();

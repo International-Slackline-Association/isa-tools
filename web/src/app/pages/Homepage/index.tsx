@@ -1,13 +1,13 @@
-import { Button, Typography, buttonClasses } from '@mui/material';
-import { Stack } from '@mui/system';
 import { Link } from 'react-router-dom';
-import Grid from '@mui/system/Unstable_Grid';
-import CardMembershipIcon from '@mui/icons-material/CardMembership';
+
 import BuildIcon from '@mui/icons-material/Build';
-import WarningIcon from '@mui/icons-material/Warning';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import RedeemIcon from '@mui/icons-material/Redeem';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import WarningIcon from '@mui/icons-material/Warning';
+import { Button, Typography, buttonClasses } from '@mui/material';
+import { Stack } from '@mui/system';
+import Grid from '@mui/system/Unstable_Grid';
 
 export const homepageItems = [
   {

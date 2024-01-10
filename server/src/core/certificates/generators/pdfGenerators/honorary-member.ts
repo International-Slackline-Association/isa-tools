@@ -1,7 +1,8 @@
 import { PDFDocument } from 'pdf-lib';
-import { PDFModificationsObject } from './types';
-import { loadPDFTemplate, convertToYCoordinate, embedQRCodeToPDF, black } from './utils';
+
 import { blankPDFTemplate } from './templates';
+import { PDFModificationsObject } from './types';
+import { black, convertToYCoordinate, loadPDFTemplate } from './utils';
 
 interface Props {
   fullname: string;
@@ -11,7 +12,7 @@ interface Props {
 export async function generate(language: string, data: Props): Promise<PDFDocument> {
   const blankPDF = blankPDFTemplate('honorary-member', language);
 
-  const { boldFont, berkshireFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } =
+  const { berkshireFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } =
     await loadPDFTemplate(blankPDF);
 
   const modifications: PDFModificationsObject<Props> = {

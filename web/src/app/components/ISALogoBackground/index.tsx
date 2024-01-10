@@ -1,10 +1,6 @@
 import { Box } from '@mui/system';
 
-export function ISALogoBackground(props: {
-    zIndex?: number;
-    width?: string;
-    height?: string;
-}) {
+export function ISALogoBackground(props: { zIndex?: number }) {
   return (
     <Box
       sx={{
@@ -12,8 +8,8 @@ export function ISALogoBackground(props: {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        height: props.height || '100%',
-        width: props.width || '100%',
+        height: '80%',
+        width: '80%',
         objectFit: 'contain',
         backgroundImage: 'url(/images/isa-logo.svg)',
         backgroundPosition: 'center',

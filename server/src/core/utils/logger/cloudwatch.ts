@@ -1,7 +1,3 @@
-import { InputLogEvent } from 'aws-sdk/clients/cloudwatchlogs';
-import { cwLogs } from 'core/aws/clients';
-
-import { LogObject } from './types';
 import {
   CreateLogStreamCommand,
   DataAlreadyAcceptedException,
@@ -10,6 +6,10 @@ import {
   PutLogEventsCommand,
   ResourceNotFoundException,
 } from '@aws-sdk/client-cloudwatch-logs';
+import { InputLogEvent } from 'aws-sdk/clients/cloudwatchlogs';
+import { cwLogs } from 'core/aws/clients';
+
+import { LogObject } from './types';
 
 const APPLICATION_LOG_GROUP_NAME = process.env.APPLICATION_LOG_GROUP_NAME as string;
 
@@ -26,7 +26,10 @@ async function writeToStream(streamName: string, logs: LogObject[], sequenceToke
   if (logs.length > 0) {
     const formattedLogEvents = logs.map<InputLogEvent>((l) => {
       const { timestamp, ...rest } = l;
-      return { timestamp: new Date(timestamp || new Date()).getTime(), message: JSON.stringify(rest) };
+      return {
+        timestamp: new Date(timestamp || new Date()).getTime(),
+        message: JSON.stringify(rest),
+      };
     });
     await cwLogs
       .send(
@@ -48,7 +51,10 @@ async function writeToStream(streamName: string, logs: LogObject[], sequenceToke
           if (isStreamCreated) {
             await writeToStream(streamName, logs);
           }
-        } else if (err instanceof InvalidSequenceTokenException || err instanceof DataAlreadyAcceptedException) {
+        } else if (
+          err instanceof InvalidSequenceTokenException ||
+          err instanceof DataAlreadyAcceptedException
+        ) {
           // Message = The given sequenceToken is invalid. The next expected sequenceToken is: XXXX
           // Message = "The given batch of log events has already been accepted. The next batch can be sent with sequenceToken: XXX"
           const token = err.message.split(':')[1].trim();
@@ -64,12 +70,20 @@ async function writeToStream(streamName: string, logs: LogObject[], sequenceToke
 
 async function ensureStreamExists(streamName: string) {
   const streamNotExists = await cwLogs
-    .send(new DescribeLogStreamsCommand({ logGroupName: APPLICATION_LOG_GROUP_NAME, logStreamNamePrefix: streamName }))
+    .send(
+      new DescribeLogStreamsCommand({
+        logGroupName: APPLICATION_LOG_GROUP_NAME,
+        logStreamNamePrefix: streamName,
+      }),
+    )
     .then((data) => data.logStreams?.length === 0)
     .catch(() => true);
   if (streamNotExists) {
     await cwLogs.send(
-      new CreateLogStreamCommand({ logGroupName: APPLICATION_LOG_GROUP_NAME, logStreamName: streamName }),
+      new CreateLogStreamCommand({
+        logGroupName: APPLICATION_LOG_GROUP_NAME,
+        logStreamName: streamName,
+      }),
     );
     return true;
   }

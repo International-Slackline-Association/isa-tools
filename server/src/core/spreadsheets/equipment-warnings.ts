@@ -1,5 +1,4 @@
 import { getSpreadsheetValues } from './utils';
-import * as dateFns from 'date-fns';
 
 export const getEquipmentWarnings = async () => {
   return getSpreadsheetValues('Warnings', 'equipment-warnings', [

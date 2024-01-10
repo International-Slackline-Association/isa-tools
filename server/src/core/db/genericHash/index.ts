@@ -1,7 +1,8 @@
 import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { ddb } from 'core/aws/clients';
 import { DDBGenericHashAttrs, DDBGenericHashItem } from 'core/db/genericHash/types';
-import { composeKey, destructKey, TABLE_NAME, transformUtils } from 'core/db/utils';
+import { TABLE_NAME, transformUtils } from 'core/db/utils';
+
 import { ConvertKeysToInterface, TransformerParams } from '../types';
 
 const keysUsed = ['PK', 'SK_GSI'] as const;
@@ -31,7 +32,7 @@ const keyUtils = typeSafeCheck({
   },
 });
 
-const { key, attrsToItem, itemToAttrs, keyFields, isKeyValueMatching } = transformUtils<
+const { key, attrsToItem, itemToAttrs } = transformUtils<
   DDBGenericHashItem,
   DDBGenericHashAttrs,
   typeof keysUsed

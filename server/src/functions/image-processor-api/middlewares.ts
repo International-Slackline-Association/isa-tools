@@ -1,7 +1,11 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { logger } from 'core/utils/logger';
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 
-export const injectCommonlyUsedHeadersMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
+export const injectCommonlyUsedHeadersMiddleware = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
   next();
 };
 

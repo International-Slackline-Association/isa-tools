@@ -1,28 +1,9 @@
-import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  styled,
-  Typography,
-  colors,
-  Stack,
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  CircularProgress,
-  Button,
-  Link,
-  Divider,
-} from '@mui/material';
+import { Helmet } from 'react-helmet-async';
+
+import { CircularProgress, Divider, Paper, Stack, Typography } from '@mui/material';
+
 import { signApi } from 'app/api/sign-api';
 import { ISALogoBackground } from 'app/components/ISALogoBackground';
-import { Helmet } from 'react-helmet-async';
 
 export function Verify() {
   const sp = new URLSearchParams(window.location.search);
@@ -33,7 +14,7 @@ export function Verify() {
   return (
     <>
       <Helmet>
-        <title>ISA Verify</title>
+        <title>ISA Code Verification</title>
         <meta name="description" content="Verify ISA Codes" />
       </Helmet>
       <Stack
@@ -48,7 +29,7 @@ export function Verify() {
           position: 'relative',
         }}
       >
-        <ISALogoBackground zIndex={1} width="80%" height="80%" />
+        <ISALogoBackground zIndex={1} />
         <Divider flexItem>
           <img style={{ width: '100%' }} src={'/images/isa-logo-wide.svg'} alt="ISA Logo" />{' '}
         </Divider>

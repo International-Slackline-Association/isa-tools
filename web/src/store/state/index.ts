@@ -1,5 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/redux/toolkit';
+
 import { AppState, SnackbarNotification } from './types';
 
 export const initialState: AppState = {

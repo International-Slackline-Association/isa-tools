@@ -1,4 +1,4 @@
-import { GetParameterCommand, GetParametersCommand } from '@aws-sdk/client-ssm';
+import { GetParameterCommand } from '@aws-sdk/client-ssm';
 import { ssm } from 'core/aws/clients';
 import { google, sheets_v4 } from 'googleapis';
 
@@ -30,7 +30,8 @@ export const getSpreadsheetValues = async <T extends string>(
   if (cachedValue.length <= 0 || cache.expiresIn < Date.now()) {
     await authorizeSpreadsheet();
 
-    const spreadsheetId = spreadsheet === 'certificates' ? certificatesSpreadsheetId : equipmentWarningsSpreadsheetId;
+    const spreadsheetId =
+      spreadsheet === 'certificates' ? certificatesSpreadsheetId : equipmentWarningsSpreadsheetId;
 
     const result = await sheets.spreadsheets.values.batchGet({
       spreadsheetId: spreadsheetId,
@@ -48,10 +49,10 @@ export const getSpreadsheetValues = async <T extends string>(
   }
 
   for (const valueRange of valueRanges) {
-    const range = valueRange.range;
+    // const range = valueRange.range;
     const rangeData = valueRange.values;
 
-    const headers = rangeData?.[0] ?? [];
+    // const headers = rangeData?.[0] ?? [];
     const rows = rangeData?.slice(1) ?? [];
     for (const row of rows) {
       const v: { [key in T]: string | undefined } = {} as any;
@@ -74,7 +75,12 @@ const authorizeSpreadsheet = async () => {
   if (!sheets) {
     const ssmParam = await ssm.send(new GetParameterCommand({ Name: googleCredsSSMParameter }));
     const googleCreds = JSON.parse(ssmParam.Parameter?.Value || '');
-    const client = new google.auth.JWT(googleCreds.client_email, undefined, googleCreds.private_key, SCOPES);
+    const client = new google.auth.JWT(
+      googleCreds.client_email,
+      undefined,
+      googleCreds.private_key,
+      SCOPES,
+    );
     await client.authorize();
     sheets = google.sheets({ version: 'v4', auth: client });
   }

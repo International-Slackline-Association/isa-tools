@@ -1,14 +1,12 @@
-import type { AWS } from '@serverless/typescript';
-
 import api from '@functions/api/lambda';
+import certificateTester from '@functions/certificateTester/lambda';
 import imageProcessorApi from '@functions/image-processor-api/lambda';
 import logger from '@functions/logger/lambda';
-import certificateTester from '@functions/certificateTester/lambda';
-
-import { cloudwatchResources } from 'infrastructure/cloudwatch';
-import { s3Resources } from 'infrastructure/s3';
+import type { AWS } from '@serverless/typescript';
 import { backupResources } from 'infrastructure/backup';
+import { cloudwatchResources } from 'infrastructure/cloudwatch';
 import { dynamodbResources } from 'infrastructure/dynamodb';
+import { s3Resources } from 'infrastructure/s3';
 
 const serverlessConfiguration: AWS = {
   service: 'isa-documents',

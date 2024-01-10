@@ -1,9 +1,10 @@
-import express, { Request, Response } from 'express';
-import { catchExpressJsErrorWrapper, validateApiPayload } from './utils';
-import { ProcessImagePostBody, processImageSchema } from './schema';
-import { s3 } from 'core/aws/clients';
 import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { s3 } from 'core/aws/clients';
+import express, { Request, Response } from 'express';
 import sharp, { Sharp } from 'sharp';
+
+import { ProcessImagePostBody, processImageSchema } from './schema';
+import { catchExpressJsErrorWrapper, validateApiPayload } from './utils';
 
 export const processImage = async (req: Request<any, any, ProcessImagePostBody>, res: Response) => {
   const body = req.body;

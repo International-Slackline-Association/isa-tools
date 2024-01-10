@@ -1,11 +1,11 @@
-import QRCode from 'qrcode';
-import { PDFDocument, PDFFont, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
+import { PDFDocument, PDFFont, rgb } from 'pdf-lib';
+import QRCode from 'qrcode';
 
+import berkshireTTF from './fonts/BerkshireSwash-Regular.ttf';
+import boldTTF from './fonts/Montserrat-Bold.ttf';
 import regularTTF from './fonts/Montserrat-Regular.ttf';
 import semiboldTTF from './fonts/Montserrat-SemiBold.ttf';
-import boldTTF from './fonts/Montserrat-Bold.ttf';
-import berkshireTTF from './fonts/BerkshireSwash-Regular.ttf';
 
 export const isaRed = rgb(237 / 255, 80 / 255, 53 / 255);
 export const isaBlue = rgb(0 / 255, 160 / 255, 153 / 255);
@@ -34,11 +34,20 @@ export const loadPDFTemplate = async (blankPDF: string) => {
   };
 };
 
-export const convertToYCoordinate = (y: number, height: number, font: PDFFont, fontSize: number) => {
+export const convertToYCoordinate = (
+  y: number,
+  height: number,
+  font: PDFFont,
+  fontSize: number,
+) => {
   return height - (y + fontSize / 2);
 };
 
-export const embedQRCodeToPDF = async (pdfDoc: PDFDocument, url: string, point: { x: number; y: number }) => {
+export const embedQRCodeToPDF = async (
+  pdfDoc: PDFDocument,
+  url: string,
+  point: { x: number; y: number },
+) => {
   const dataUrl = await createQRCode(url);
   const qrImage = await pdfDoc.embedPng(dataUrl);
   const page = pdfDoc.getPages()[0];

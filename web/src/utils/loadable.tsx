@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense, lazy } from 'react';
 
 interface Opts {
   fallback: React.ReactNode;
@@ -11,7 +11,6 @@ export const lazyLoad = <T extends Promise<any>, U extends React.ComponentType<a
   opts: Opts = { fallback: null },
 ) => {
   let lazyFactory: () => Promise<{ default: U }> = importFunc;
-
   if (selectorFunc) {
     lazyFactory = () => importFunc().then((module) => ({ default: selectorFunc(module) }));
   }

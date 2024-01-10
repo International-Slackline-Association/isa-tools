@@ -1,7 +1,6 @@
 import { blankPDFTemplate } from './templates';
-import { PDFDocument } from 'pdf-lib';
-import { black, convertToYCoordinate, embedQRCodeToPDF, loadPDFTemplate } from './utils';
 import { PDFModificationsObject } from './types';
+import { black, convertToYCoordinate, embedQRCodeToPDF, loadPDFTemplate } from './utils';
 
 interface Props {
   recordType: string;

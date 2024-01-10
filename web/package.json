@@ -7,8 +7,7 @@
     "start": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --ext js,ts,tsx --fix",
-    "deploy": "env-cmd -f .env --use-shell 'npm run build && sh ./internals/deployToS3.sh'"
+    "deploy": "eslint . && env-cmd -f .env --use-shell 'npm run build && sh ./internals/deployToS3.sh'"
   },
   "dependencies": {
     "@emotion/react": "11.11.3",
@@ -18,29 +17,21 @@
     "@mui/material": "5.15.3",
     "@mui/system": "5.15.3",
     "@mui/utils": "5.15.3",
-    "@reduxjs/toolkit": "^2.0.1",
+    "@reduxjs/toolkit": "2.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "4.0.12",
     "react-helmet-async": "2.0.4",
     "react-redux": "^9.0.4",
     "react-router-dom": "6.21.1",
-    "sanitize.css": "^13.0.0",
     "vite-tsconfig-paths": "^4.2.3"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/node": "20.10.6",
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",
-    "@typescript-eslint/eslint-plugin": "6.18.0",
-    "@typescript-eslint/parser": "6.18.0",
     "@vitejs/plugin-react": "4.2.1",
     "env-cmd": "10.1.0",
-    "eslint": "8.56.0",
-    "eslint-plugin-react": "7.33.2",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "prettier": "3.1.1",
     "type-fest": "4.9.0",
     "typescript": "5.3.3",
     "vite": "5.0.11"

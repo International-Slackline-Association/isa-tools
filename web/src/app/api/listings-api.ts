@@ -1,11 +1,11 @@
-import { baseApi } from 'store/rtk-query';
-import { AsyncReturnType } from 'type-fest';
 import {
   listCertifiedGears,
+  listEquipmentWarnings,
   listInstructors,
   listRiggers,
-  listEquipmentWarnings,
 } from '@server/functions/api/endpoints/listings-api';
+import { baseApi } from 'store/rtk-query';
+import { AsyncReturnType } from 'type-fest';
 
 export const listingsApi = baseApi
   .enhanceEndpoints({
@@ -37,7 +37,10 @@ export const listingsApi = baseApi
           return response.items;
         },
       }),
-      getEquipmentWarnings: builder.query<AsyncReturnType<typeof listEquipmentWarnings>['items'], void>({
+      getEquipmentWarnings: builder.query<
+        AsyncReturnType<typeof listEquipmentWarnings>['items'],
+        void
+      >({
         query: () => ({
           url: `list/equipment-warnings`,
         }),

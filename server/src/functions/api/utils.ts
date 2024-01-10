@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
-import { z, ZodError, ZodType, ZodTypeAny } from 'zod';
+import { ZodError, ZodTypeAny, z } from 'zod';
 
-export const wrapEndpoint = (f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>) => {
+export const wrapEndpoint = (
+  f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>,
+) => {
   return (req: Request, res: Response, next: any) => {
     f(req, res, next)
       .then((result) => {
@@ -17,7 +19,10 @@ export const jsonResponse = (res: Response, data: any) => {
   res.json(data);
 };
 
-export const validateApiPayload = <T extends ZodTypeAny>(payload: unknown, schema: T): z.infer<T> => {
+export const validateApiPayload = <T extends ZodTypeAny>(
+  payload: unknown,
+  schema: T,
+): z.infer<T> => {
   try {
     return schema.parse(payload);
   } catch (error) {

@@ -1,11 +1,11 @@
-import { default as express, Express, urlencoded, json } from 'express';
-import cors from 'cors';
-
 import {
-  injectCommonlyUsedHeadersMiddleware,
   errorMiddleware,
+  injectCommonlyUsedHeadersMiddleware,
   notFoundMiddleware,
 } from '@functions/image-processor-api/middlewares';
+import cors from 'cors';
+import { Express, default as express, json, urlencoded } from 'express';
+
 import { api } from './api';
 
 const app = express();

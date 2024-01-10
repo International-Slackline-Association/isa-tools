@@ -1,24 +1,48 @@
 import { Fragment } from 'react';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import { Box, GlobalStyles } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import NotificationSnackbar from 'app/components/NotificationSnackbar';
 import { withErrorHandler } from 'app/components/error-handling';
 import AppErrorBoundaryFallback from 'app/components/error-handling/fallbacks/App';
-import { Helmet } from 'react-helmet-async';
-import { Box, GlobalStyles } from '@mui/material';
-import NotificationSnackbar from 'app/components/NotificationSnackbar';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectSnackbarNotification } from 'store/state/selectors';
 import { appActions } from 'store/state';
-import { Homepage } from './pages/Homepage';
+import { selectSnackbarNotification } from 'store/state/selectors';
+
 import { CertifiedInstructors } from '././pages/CertifiedInstructors/Loadable';
-import { CertifiedRiggers } from './pages/CertifiedRiggers/Loadable';
+import { ISALogoBackground } from './components/ISALogoBackground';
 import { CertifiedGears } from './pages/CertifiedGears/Loadable';
+import { CertifiedRiggers } from './pages/CertifiedRiggers/Loadable';
 import { EquipmentWarnings } from './pages/EquipmentWarnings/Loadable';
+import { Homepage } from './pages/Homepage';
 import { Verify } from './pages/Verify';
 import { Verify as VerifyAsync } from './pages/Verify/Loadable';
-import { ISALogoBackground } from './components/ISALogoBackground';
 
-function ISADocs() {
+function DocsApp() {
+  return (
+    <>
+      <ISALogoBackground />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/certified-instructors" element={<CertifiedInstructors />} />
+          <Route path="/certified-riggers" element={<CertifiedRiggers />} />
+          <Route path="/certified-gears" element={<CertifiedGears />} />
+          <Route path="/equipment-warnings" element={<EquipmentWarnings />} />
+          <Route path="/verify" element={<VerifyAsync />} />
+          <Route path="*" element={<Homepage />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+}
+
+function VerifyApp() {
+  return <Verify />;
+}
+
+export function App() {
   const snackbarNotification = useSelector(selectSnackbarNotification);
   const dispatch = useDispatch();
 
@@ -28,24 +52,6 @@ function ISADocs() {
 
   const isVerifyWebsite = window.location.host?.split('.')[0] === 'verify';
 
-  return isVerifyWebsite ? (
-    <Verify />
-  ) : (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/certified-instructors" element={<CertifiedInstructors />} />
-        <Route path="/certified-riggers" element={<CertifiedRiggers />} />
-        <Route path="/certified-gears" element={<CertifiedGears />} />
-        <Route path="/equipment-warnings" element={<EquipmentWarnings />} />
-        <Route path="/verify" element={<VerifyAsync />} />
-        <Route path="*" element={<Homepage />} />
-      </Routes>
-      <NotificationSnackbar snackbarNotification={snackbarNotification} onClose={onSnackbarClose} />
-    </BrowserRouter>
-  );
-}
-
-export function App() {
   return (
     <Fragment>
       <CssBaseline />
@@ -68,9 +74,9 @@ export function App() {
           textAlign: 'center',
         }}
       >
-        <ISALogoBackground />
-        <ISADocs />
+        {isVerifyWebsite ? <VerifyApp /> : <DocsApp />}
       </Box>
+      <NotificationSnackbar snackbarNotification={snackbarNotification} onClose={onSnackbarClose} />
     </Fragment>
   );
 }

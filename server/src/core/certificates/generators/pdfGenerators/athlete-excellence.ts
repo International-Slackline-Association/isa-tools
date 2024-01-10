@@ -1,7 +1,8 @@
 import { PDFDocument } from 'pdf-lib';
-import { PDFModificationsObject } from './types';
-import { loadPDFTemplate, convertToYCoordinate, embedQRCodeToPDF, black } from './utils';
+
 import { blankPDFTemplate } from './templates';
+import { PDFModificationsObject } from './types';
+import { black, convertToYCoordinate, embedQRCodeToPDF, loadPDFTemplate } from './utils';
 
 interface Props {
   fullname: string;
@@ -12,10 +13,15 @@ interface Props {
   discipline: string;
 }
 
-export async function generate(language: string, data: Props, qrCodeUrl: string): Promise<PDFDocument> {
+export async function generate(
+  language: string,
+  data: Props,
+  qrCodeUrl: string,
+): Promise<PDFDocument> {
   const blankPDF = blankPDFTemplate('athlete-excellence', language);
 
-  const { boldFont, berkshireFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } = await loadPDFTemplate(blankPDF);
+  const { boldFont, berkshireFont, page, pageHeight, pageWidth, pdfDoc, semiboldFont } =
+    await loadPDFTemplate(blankPDF);
 
   const modifications: PDFModificationsObject<Props> = {
     fullname: {

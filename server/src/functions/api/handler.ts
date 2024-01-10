@@ -1,6 +1,7 @@
 import serverlessExpress from '@vendia/serverless-express';
-import app from './app';
 import { logger } from 'core/utils/logger';
+
+import app from './app';
 
 logger.updateMeta({ lambdaName: 'api' });
 
