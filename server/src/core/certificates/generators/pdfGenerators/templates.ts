@@ -2,6 +2,7 @@ import { CertificateType } from 'core/spreadsheets/types';
 
 import ATHLETE_EXCELLENCE from './templates/athlete-excellence-en.pdf';
 import ATHLETIC_AWARD_EN from './templates/athletic-award-en.pdf';
+import CONTEST_ORGANIZER_EN from './templates/contest-organizer-en.pdf';
 import HONORARY_MEMBER_EN from './templates/honorary-member-en.pdf';
 import INSTRUCTOR_EN from './templates/instructor-en.pdf';
 import ISA_MEMBER from './templates/isa-member-en.pdf';
@@ -24,6 +25,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, _language: st
       return ISA_MEMBER;
     case 'honorary-member':
       return HONORARY_MEMBER_EN;
+    case 'contest-organizer':
+      return CONTEST_ORGANIZER_EN;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }

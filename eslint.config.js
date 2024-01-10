@@ -14,7 +14,17 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const compat = new FlatCompat({ resolvePluginsRelativeTo: __dirname });
 
 export default [
-  { ignores: ['**/node_modules', '**/build', '**/dist', '**/lib', '**/public'] },
+  {
+    ignores: [
+      '**/node_modules',
+      '**/build',
+      '**/dist',
+      '**/lib',
+      '**/public',
+      '**/.esbuild',
+      '**/.serverless',
+    ],
+  },
   js.configs.recommended,
   reactRecommended,
   reactJsxRuntime,

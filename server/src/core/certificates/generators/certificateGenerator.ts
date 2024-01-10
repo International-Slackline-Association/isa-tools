@@ -42,6 +42,9 @@ export const generateCertificatePDF = async (
     case 'honorary-member':
       pdf = await generateHonoraryMember(params);
       break;
+    case 'contest-organizer':
+      pdf = await generateContestOrganizer(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -215,5 +218,30 @@ const generateHonoraryMember = async (payload: GenerateCertificatePayload) => {
     fullname: item.name!,
     date: item.date!,
   });
+  return pdf;
+};
+
+const generateContestOrganizer = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getContestOrganizers({ certId: certificateId }))[0];
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name} ${item.surname}" has a valid CONTEST ORGANIZER certificate for the contest "${item.contestName}" in "${item.location}"`,
+  });
+
+  const pdf = await pdfGenerators.generateContestOrganizerPDF(
+    language,
+    {
+      fullname: `${item.name} ${item.surname}`,
+      contestName: item.contestName!,
+      contestSize: item.contestSize!,
+      location: item.location!,
+      date: item.date!,
+      discipline: item.discipline!,
+    },
+    verificationUrl,
+  );
   return pdf;
 };
