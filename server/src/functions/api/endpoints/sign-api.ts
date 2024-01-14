@@ -2,7 +2,7 @@ import * as dateFns from 'date-fns';
 import { createSignedDocument, getSignedDocument } from 'core/documentVerification';
 import express, { Request } from 'express';
 
-import { validateApiPayload, verifyTrustedServiceRequest, wrapEndpoint } from '../utils';
+import { expressRoute, validateApiPayload, verifyTrustedServiceRequest } from '../utils';
 import { SignDocumentePostBody, signDocumentPostBodySchema } from './schema';
 
 const sign = async (req: Request<any, any, SignDocumentePostBody>) => {
@@ -60,5 +60,5 @@ export const verifySignedDocument = async (req: Request) => {
 };
 
 export const signApi = express.Router();
-signApi.post('/', wrapEndpoint(sign));
-signApi.get('/verify', wrapEndpoint(verifySignedDocument));
+signApi.post('/', expressRoute(sign));
+signApi.get('/verify', expressRoute(verifySignedDocument));

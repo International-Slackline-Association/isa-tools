@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ZodError, ZodTypeAny, z } from 'zod';
 
-export const wrapEndpoint = (
+export const expressRoute = (
   f: (req: Request<any, any, any, any>, res: Response, next?: any) => Promise<any>,
 ) => {
   return (req: Request, res: Response, next: any) => {
@@ -13,10 +13,6 @@ export const wrapEndpoint = (
       })
       .catch(next);
   };
-};
-
-export const jsonResponse = (res: Response, data: any) => {
-  res.json(data);
 };
 
 export const validateApiPayload = <T extends ZodTypeAny>(

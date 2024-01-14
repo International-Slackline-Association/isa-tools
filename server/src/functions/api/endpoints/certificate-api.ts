@@ -5,10 +5,10 @@ import { CertificateType } from 'core/spreadsheets/types';
 import express, { Request, Response } from 'express';
 
 import {
+  expressRoute,
   validateApiPayload,
   verifyTrustedDomainRequest,
   verifyTrustedServiceRequest,
-  wrapEndpoint,
 } from '../utils';
 import {
   GenerateCertificatePostBody,
@@ -68,5 +68,5 @@ const generateCertificate = async (
 };
 
 export const certificateApi = express.Router();
-certificateApi.get('/', wrapEndpoint(listCertificates));
-certificateApi.post('/generate', wrapEndpoint(generateCertificate));
+certificateApi.get('/', expressRoute(listCertificates));
+certificateApi.post('/generate', expressRoute(generateCertificate));

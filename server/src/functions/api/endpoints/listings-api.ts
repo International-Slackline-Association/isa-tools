@@ -3,7 +3,7 @@ import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
 import { getEquipmentWarnings } from 'core/spreadsheets/equipment-warnings';
 import express, { Request } from 'express';
 
-import { verifyTrustedDomainRequest, wrapEndpoint } from '../utils';
+import { expressRoute, verifyTrustedDomainRequest } from '../utils';
 
 export const listInstructors = async (req: Request) => {
   verifyTrustedDomainRequest(req);
@@ -87,7 +87,7 @@ const sortByField = (...fields: string[]) => {
 };
 
 export const listingsApi = express.Router();
-listingsApi.get('/instructors', wrapEndpoint(listInstructors));
-listingsApi.get('/riggers', wrapEndpoint(listRiggers));
-listingsApi.get('/approved-gears', wrapEndpoint(listCertifiedGears));
-listingsApi.get('/equipment-warnings', wrapEndpoint(listEquipmentWarnings));
+listingsApi.get('/instructors', expressRoute(listInstructors));
+listingsApi.get('/riggers', expressRoute(listRiggers));
+listingsApi.get('/approved-gears', expressRoute(listCertifiedGears));
+listingsApi.get('/equipment-warnings', expressRoute(listEquipmentWarnings));
