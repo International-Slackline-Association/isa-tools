@@ -7,6 +7,7 @@ import { backupResources } from 'infrastructure/backup';
 import { cloudwatchResources } from 'infrastructure/cloudwatch';
 import { dynamodbResources } from 'infrastructure/dynamodb';
 import { s3Resources } from 'infrastructure/s3';
+import { snsResources } from 'infrastructure/sns';
 
 const serverlessConfiguration: AWS = {
   service: 'isa-tools',
@@ -137,6 +138,7 @@ const serverlessConfiguration: AWS = {
       ...s3Resources,
       ...backupResources,
       ...dynamodbResources,
+      ...snsResources,
     },
   },
 };
