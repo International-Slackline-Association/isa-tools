@@ -4,7 +4,7 @@ export const dynamodbResources: NonNullable<AWS['resources']>['Resources'] = {
   IsaDocumentsTable: {
     Type: 'AWS::DynamoDB::Table',
     Properties: {
-      TableName: 'isa-documents-${sls:stage}',
+      TableName: 'isa-tools-${sls:stage}',
       AttributeDefinitions: [
         {
           AttributeName: 'PK',

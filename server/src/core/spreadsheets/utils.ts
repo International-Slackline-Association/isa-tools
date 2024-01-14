@@ -3,7 +3,7 @@ import { ssm } from 'core/aws/clients';
 import { google, sheets_v4 } from 'googleapis';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
-const googleCredsSSMParameter = 'isa-documents-google-credentials-json';
+const googleCredsSSMParameter = 'isa-tools-google-credentials-json';
 const certificatesSpreadsheetId = '1WO8RDDn6WKTmZQX4YK9xNwWfh0-eciIX0fdSvsgNRsA';
 const equipmentWarningsSpreadsheetId = '16cp9iRy1Rs8uOU_UZ9ouJGkhQ_0IiySmF5UNCaorJHM';
 

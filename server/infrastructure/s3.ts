@@ -4,7 +4,7 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
   TemporaryUploadsS3BBucket: {
     Type: 'AWS::S3::Bucket',
     Properties: {
-      BucketName: 'isa-documents-uploads-${sls:stage}',
+      BucketName: 'isa-tools-temporary-uploads-${sls:stage}',
       CorsConfiguration: {
         CorsRules: [
           {
@@ -35,7 +35,7 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
   WebAppS3Bucket: {
     Type: 'AWS::S3::Bucket',
     Properties: {
-      BucketName: 'isa-documents-ui-${sls:stage}',
+      BucketName: 'isa-tools-ui-${sls:stage}',
     },
   },
   WebAppS3BucketPolicy: {
@@ -55,7 +55,7 @@ export const s3Resources: NonNullable<AWS['resources']>['Resources'] = {
               Service: 'cloudfront.amazonaws.com',
             },
             Action: 's3:GetObject',
-            Resource: 'arn:aws:s3:::isa-documents-ui-prod/*',
+            Resource: 'arn:aws:s3:::isa-tools-ui-prod/*',
             Condition: {
               StringEquals: {
                 'AWS:SourceArn': 'arn:aws:cloudfront::387132903656:distribution/E22IDS9URBBBCU',

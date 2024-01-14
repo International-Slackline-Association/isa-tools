@@ -23,8 +23,8 @@ const setupExpressApp = (app: Express) => {
 };
 
 const setupRoutes = (app: Express) => {
-  app.use('/certificate', certificateApi);
-  app.use('/list', listingsApi);
+  app.use('/sheets/certificate', certificateApi);
+  app.use('/sheets/list', listingsApi);
   app.use('/sign', signApi);
 };
 

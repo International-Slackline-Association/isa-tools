@@ -5,7 +5,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 
 import { documentVerificationPublicKey } from './verificationPublicKey';
 
-const jwtSecretSSMParameter = 'isa-documents-rsa-private-key';
+const jwtSecretSSMParameter = 'isa-tools-rsa-private-key';
 
 export const signJWT = async (payload: Record<string, any>, opts: SignOptions) => {
   const ssmParam = await ssm.send(new GetParametersCommand({ Names: [jwtSecretSSMParameter] }));

@@ -9,7 +9,7 @@ import { dynamodbResources } from 'infrastructure/dynamodb';
 import { s3Resources } from 'infrastructure/s3';
 
 const serverlessConfiguration: AWS = {
-  service: 'isa-documents',
+  service: 'isa-tools',
   frameworkVersion: '3',
   plugins: ['serverless-plugin-log-subscription', 'serverless-esbuild', 'serverless-prune-plugin'],
   provider: {
@@ -36,7 +36,7 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       APPLICATION_LOG_GROUP_NAME: { Ref: 'ApplicationLogsGroup' },
       TEMPORARY_UPLOADS_S3_BUCKET: { Ref: 'TemporaryUploadsS3BBucket' },
-      ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY: '${ssm:/isa-documents-trusted-service-api-key}',
+      ISA_DOCUMENTS_TRUSTED_SERVICE_API_KEY: '${ssm:/isa-tools-trusted-service-api-key}',
       ISA_DOCUMENTS_TABLE_NAME: { Ref: 'IsaDocumentsTable' },
     },
     iam: {
@@ -73,7 +73,7 @@ const serverlessConfiguration: AWS = {
           {
             Effect: 'Allow',
             Action: ['ssm:GetParameters', 'ssm:GetParameter', 'ssm:GetParametersByPath'],
-            Resource: ['arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/isa-documents*'],
+            Resource: ['arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/isa-tools*'],
           },
           {
             Effect: 'Allow',
@@ -102,7 +102,7 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { api, imageProcessorApi, logger, certificateTester },
+  functions: { imageProcessorApi, api, logger, certificateTester },
   package: { individually: true },
   custom: {
     esbuild: {
