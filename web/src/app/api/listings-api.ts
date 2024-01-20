@@ -15,7 +15,7 @@ export const listingsApi = baseApi
     endpoints: (builder) => ({
       getInstructorsList: builder.query<AsyncReturnType<typeof listInstructors>['items'], void>({
         query: () => ({
-          url: `list/instructors`,
+          url: `sheets/list/instructors`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listInstructors>) => {
           return response.items;
@@ -23,7 +23,7 @@ export const listingsApi = baseApi
       }),
       getRiggerList: builder.query<AsyncReturnType<typeof listRiggers>['items'], void>({
         query: () => ({
-          url: `list/riggers`,
+          url: `sheets/list/riggers`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listRiggers>) => {
           return response.items;
@@ -31,7 +31,7 @@ export const listingsApi = baseApi
       }),
       getCertifiedGears: builder.query<AsyncReturnType<typeof listCertifiedGears>['items'], void>({
         query: () => ({
-          url: `list/approved-gears`,
+          url: `sheets/list/approved-gears`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listCertifiedGears>) => {
           return response.items;
@@ -42,7 +42,7 @@ export const listingsApi = baseApi
         void
       >({
         query: () => ({
-          url: `list/equipment-warnings`,
+          url: `sheets/list/equipment-warnings`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listEquipmentWarnings>) => {
           return response.items;

@@ -5,7 +5,7 @@ import { showErrorNotification } from 'utils';
 export const API_BASE_URL = '';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://docs-api.slacklineinternational.org',
+  baseUrl: 'https://tools-api.slacklineinternational.org',
 });
 
 export const baseApi = createApi({

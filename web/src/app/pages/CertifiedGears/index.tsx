@@ -3,7 +3,6 @@ import { useState } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
-  Box,
   CircularProgress,
   Collapse,
   IconButton,
