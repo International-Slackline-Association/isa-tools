@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import { ReactNode } from 'react';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import {
   CircularProgress,
-  Collapse,
   IconButton,
   Link,
   Paper,
@@ -19,26 +17,30 @@ import {
 } from '@mui/material';
 
 import { listingsApi } from 'app/api/listings-api';
+import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
 export function CertifiedGears() {
   const { data, isFetching } = listingsApi.useGetCertifiedGearsQuery();
-  const [openIndex, setOpenIndex] = useState<number>();
+  const { InfoDialog, showInfoDialog } = useDetailDialog();
 
-  const openRow = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(undefined);
-    } else {
-      setOpenIndex(index);
+  const showDetails = (index: number) => {
+    const row = data?.[index];
+    if (row) {
+      showInfoDialog({
+        title: `${row.brand} - ${row.modelName}`,
+        content: <GearDetails row={row} />,
+      });
     }
   };
 
   return (
     <Stack spacing={2}>
       <Typography textAlign={'left'} variant="body2Bold">
-        List of Certified Gears
+        List of Certified Gear
       </Typography>
+      <InfoDialog />
       {isFetching ? (
         <CircularProgress />
       ) : (
@@ -63,8 +65,8 @@ export function CertifiedGears() {
                 <>
                   <AlternatingTableRow key={row.certId}>
                     <TableCell>
-                      <IconButton size="small" onClick={() => openRow(index)}>
-                        {openIndex === index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      <IconButton size="small" onClick={() => showDetails(index)}>
+                        <ZoomInIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell>
@@ -76,33 +78,6 @@ export function CertifiedGears() {
                       <Link href={row.productLink}>Product Link</Link>
                     </TableCell>
                   </AlternatingTableRow>
-                  <TableCell style={{ padding: 0 }} colSpan={6}>
-                    <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
-                      <Stack direction={'row'} spacing={4} sx={{ p: 2, flexWrap: 'wrap' }}>
-                        <Typography variant="body2">
-                          <b>Product Type</b>: {row.productType}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Model Version</b>: {row.modelVersion}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Release Year</b>: {row.releaseYear}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Manual Link</b>: <Link href={row.manualLink}>Link</Link>
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Testing Laboratory</b>: {row.testingLaboratory}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Test Date</b>: {row.testDate}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Standard Version</b>: {row.standardVersion}
-                        </Typography>
-                      </Stack>
-                    </Collapse>
-                  </TableCell>
                 </>
               ))}
             </TableBody>
@@ -112,3 +87,21 @@ export function CertifiedGears() {
     </Stack>
   );
 }
+
+const GearDetails = ({ row }: { row: any }) => (
+  <Stack spacing={2} sx={{}}>
+    <DetailLabel label="Product Type" value={row.productType} />
+    <DetailLabel label="Model Version" value={row.modelVersion} />
+    <DetailLabel label="Release Year" value={row.releaseYear} />
+    <DetailLabel label="Manual Link" value={<Link href={row.manualLink}>Link</Link>} />
+    <DetailLabel label="Testing Laboratory" value={row.testingLaboratory} />
+    <DetailLabel label="Test Date" value={row.testDate} />
+    <DetailLabel label="Standard Version" value={row.standardVersion} />
+  </Stack>
+);
+
+const DetailLabel = ({ label, value }: { label: string; value: string | ReactNode }) => (
+  <Typography variant="body2">
+    <b>{label}</b>: {value}
+  </Typography>
+);

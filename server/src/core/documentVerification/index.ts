@@ -23,7 +23,7 @@ export const createSignedDocument = async (document: {
     {
       expiresIn: expiresInSeconds,
       subject: subject,
-      issuer: 'docs.slacklineinternational.org',
+      issuer: 'slacklineinternational.org',
     },
   );
 

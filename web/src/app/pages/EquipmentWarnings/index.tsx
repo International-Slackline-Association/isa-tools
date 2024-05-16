@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import { ReactNode } from 'react';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import {
   CircularProgress,
-  Collapse,
   IconButton,
   Link,
   Paper,
@@ -19,26 +17,29 @@ import {
 } from '@mui/material';
 
 import { listingsApi } from 'app/api/listings-api';
+import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
 export function EquipmentWarnings() {
   const { data, isFetching } = listingsApi.useGetEquipmentWarningsQuery();
-  const [openIndex, setOpenIndex] = useState<number>();
+  const { InfoDialog, showInfoDialog } = useDetailDialog();
 
-  const openRow = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(undefined);
-    } else {
-      setOpenIndex(index);
+  const showDetails = (index: number) => {
+    const row = data?.[index];
+    if (row) {
+      showInfoDialog({
+        title: `${row.manufacturer} - ${row.model}`,
+        content: <Details row={row} />,
+      });
     }
   };
-
   return (
     <Stack spacing={2}>
       <Typography textAlign={'left'} variant="body2Bold">
         Warnings and recalls for slackline equipment
       </Typography>
+      <InfoDialog />
       {isFetching ? (
         <CircularProgress />
       ) : (
@@ -63,8 +64,8 @@ export function EquipmentWarnings() {
                 <>
                   <AlternatingTableRow key={index}>
                     <TableCell>
-                      <IconButton size="small" onClick={() => openRow(index)}>
-                        {openIndex === index ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                      <IconButton size="small" onClick={() => showDetails(index)}>
+                        <ZoomInIcon />
                       </IconButton>
                     </TableCell>
                     <TableCell>
@@ -80,33 +81,6 @@ export function EquipmentWarnings() {
                     <TableCell>{row.model}</TableCell>
                     <TableCell>{row.productType}</TableCell>
                   </AlternatingTableRow>
-                  <TableCell style={{ padding: 0 }} colSpan={6}>
-                    <Collapse in={openIndex === index} timeout="auto" unmountOnExit>
-                      <Stack direction={'row'} spacing={4} sx={{ p: 2, flexWrap: 'wrap' }}>
-                        <Typography variant="body2">
-                          <b>Date</b>: {row.date}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Manufacturer</b>: {row.manufacturer}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>In Production</b>: {row.inProduction}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Description</b>: {row.description}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Solution</b>: {row.solution}
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Link 1</b>: <Link href={row.link1}>Link</Link>
-                        </Typography>
-                        <Typography variant="body2">
-                          <b>Link 2</b>: <Link href={row.link2}>Link</Link>
-                        </Typography>
-                      </Stack>
-                    </Collapse>
-                  </TableCell>
                 </>
               ))}
             </TableBody>
@@ -116,3 +90,20 @@ export function EquipmentWarnings() {
     </Stack>
   );
 }
+
+const Details = ({ row }: { row: any }) => (
+  <Stack spacing={2} sx={{}}>
+    <DetailLabel label="Date" value={row.date} />
+    <DetailLabel label="In Production" value={row.inProduction} />
+    <DetailLabel label="Description" value={row.description} />
+    <DetailLabel label="Solution" value={row.solution} />
+    <DetailLabel label="Link 1" value={<Link href={row.link1}>Link</Link>} />
+    <DetailLabel label="Link 2" value={<Link href={row.link2}>Link</Link>} />
+  </Stack>
+);
+
+const DetailLabel = ({ label, value }: { label: string; value: string | ReactNode }) => (
+  <Typography variant="body2">
+    <b>{label}</b>: {value}
+  </Typography>
+);
