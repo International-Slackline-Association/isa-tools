@@ -145,6 +145,8 @@ const getApprovedGears = async (filterBy: FilterBy = {}) => {
     'productType',
     'standard',
     'standardVersion',
+    'picture1',
+    'picture2',
   ]).then(filterCertificates(filterBy));
 };
 

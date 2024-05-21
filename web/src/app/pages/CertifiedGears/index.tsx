@@ -89,7 +89,11 @@ export function CertifiedGears() {
 }
 
 const GearDetails = ({ row }: { row: any }) => (
-  <Stack spacing={2} sx={{}}>
+  <Stack spacing={2} sx={{ alignItems: 'center' }}>
+    <Stack spacing={1} direction="row" sx={{ width: '100%' }}>
+      <img src={row.picture1} alt={'Product Image'} style={{ width: '100%' }} />
+      <img src={row.picture2} alt={'Product Image'} style={{ width: '100%' }} />
+    </Stack>
     <DetailLabel label="Product Type" value={row.productType} />
     <DetailLabel label="Model Version" value={row.modelVersion} />
     <DetailLabel label="Release Year" value={row.releaseYear} />
