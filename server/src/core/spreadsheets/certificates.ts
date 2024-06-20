@@ -239,7 +239,11 @@ const filterCertificates = <T extends { isaId?: string; email?: string; certId?:
       if (certId && certificate.certId?.toLowerCase() !== certId) {
         return false;
       }
-      return id === certificate.isaId?.toLowerCase() || email === certificate.email?.toLowerCase();
+      return (
+        id === certificate.isaId?.toLowerCase() ||
+        email === certificate.email?.toLowerCase() ||
+        certId === certificate.certId?.toLowerCase()
+      );
     });
 };
 

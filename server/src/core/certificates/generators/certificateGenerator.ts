@@ -84,6 +84,10 @@ const generateRigger = async (payload: GenerateCertificatePayload) => {
   const { certificateId, subject, language, skipQRCode } = payload;
   const item = (await certificateSpreadsheet.getRiggers({ certId: certificateId }))[0];
 
+  if (!item) {
+    throw new Error(`Certificate with ID ${certificateId} not found`);
+  }
+
   const startDate = formatCertificateDate(item.startDate!);
   const expireDate = formatCertificateDate(item.endDate!);
 
