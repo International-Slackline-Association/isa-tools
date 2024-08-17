@@ -17,6 +17,7 @@ import { CertifiedGears } from './pages/CertifiedGears/Loadable';
 import { CertifiedRiggers } from './pages/CertifiedRiggers/Loadable';
 import { EquipmentWarnings } from './pages/EquipmentWarnings/Loadable';
 import { Homepage } from './pages/Homepage';
+import { SairReports } from './pages/SairReports/Loadable';
 import { Verify } from './pages/Verify';
 import { Verify as VerifyAsync } from './pages/Verify/Loadable';
 
@@ -30,6 +31,7 @@ function DocsApp() {
           <Route path="/certified-riggers" element={<CertifiedRiggers />} />
           <Route path="/certified-gears" element={<CertifiedGears />} />
           <Route path="/equipment-warnings" element={<EquipmentWarnings />} />
+          <Route path="/sair-reports" element={<SairReports />} />
           <Route path="/verify" element={<VerifyAsync />} />
           <Route path="*" element={<Homepage />} />
         </Routes>

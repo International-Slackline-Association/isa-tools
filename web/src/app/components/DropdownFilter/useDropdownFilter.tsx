@@ -1,0 +1,56 @@
+import { useMemo, useState } from 'react';
+
+import { DropdownFilter } from '.';
+
+interface Props<T, K extends keyof T> {
+  label: string;
+  list?: (string | undefined)[];
+  filterer: [T[] | undefined, K];
+}
+
+export const useDropdownFilter = <T, K extends keyof T>(props: Props<T, K>) => {
+  const [selectedValue, setSelectedValue] = useState<string>('All');
+
+  const values = [
+    'All',
+    ...new Set(props.list?.filter((c) => c).sort((a, b) => a?.localeCompare(b || '') || 0) || []),
+  ] as string[];
+
+  const itemsToFilter = props.filterer[0];
+  const filterKey = props.filterer[1];
+
+  const filteredItems = useMemo(
+    () =>
+      itemsToFilter?.filter((p) => {
+        const v = p[filterKey];
+        if (typeof v === 'string') {
+          return v.includes(selectedValue) || selectedValue === 'All';
+        } else {
+          return v === selectedValue || selectedValue === 'All';
+        }
+      }),
+    [itemsToFilter, selectedValue, filterKey],
+  );
+
+  const label = props.label;
+
+  const Dropdown = () => (
+    <DropdownFilter
+      label={label}
+      selectedValue={selectedValue}
+      onSelected={setSelectedValue}
+      values={values}
+    />
+  );
+
+  return {
+    filteredItems,
+    DropdownFilter: Dropdown,
+  };
+};
+
+export const intersectAll = <T, _>(...items: (T[] | undefined)[]) => {
+  return items.reduce((acc, curr) => {
+    return acc?.filter((a) => curr?.some((b) => a === b));
+  });
+};

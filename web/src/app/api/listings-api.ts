@@ -3,6 +3,7 @@ import {
   listEquipmentWarnings,
   listInstructors,
   listRiggers,
+  listSairReports,
 } from '@server/functions/api/endpoints/listings-api';
 import { baseApi } from 'store/rtk-query';
 import { AsyncReturnType } from 'type-fest';
@@ -45,6 +46,14 @@ export const listingsApi = baseApi
           url: `sheets/list/equipment-warnings`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listEquipmentWarnings>) => {
+          return response.items;
+        },
+      }),
+      getSairReports: builder.query<AsyncReturnType<typeof listSairReports>['items'], void>({
+        query: () => ({
+          url: `sheets/list/sair-reports`,
+        }),
+        transformResponse: (response: AsyncReturnType<typeof listSairReports>) => {
           return response.items;
         },
       }),

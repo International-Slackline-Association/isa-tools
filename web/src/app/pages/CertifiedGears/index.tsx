@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import {
+  Box,
   CircularProgress,
   IconButton,
   Link,
@@ -18,12 +19,19 @@ import {
 
 import { listingsApi } from 'app/api/listings-api';
 import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
+import { useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
 export function CertifiedGears() {
   const { data, isFetching } = listingsApi.useGetCertifiedGearsQuery();
   const { InfoDialog, showInfoDialog } = useDetailDialog();
+
+  const { filteredItems, DropdownFilter } = useDropdownFilter({
+    label: 'Product Type',
+    list: data?.map((row) => row.productType),
+    filterer: [data, 'productType'],
+  });
 
   const showDetails = (index: number) => {
     const row = data?.[index];
@@ -37,9 +45,12 @@ export function CertifiedGears() {
 
   return (
     <Stack spacing={2}>
-      <Typography textAlign={'left'} variant="body2Bold">
-        List of Certified Gear
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography textAlign={'left'} variant="body2Bold">
+          List of Certified Gear
+        </Typography>
+        <DropdownFilter />
+      </Box>
       <InfoDialog />
       {isFetching ? (
         <CircularProgress />
@@ -61,7 +72,7 @@ export function CertifiedGears() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.map((row, index) => (
+              {filteredItems?.map((row, index) => (
                 <>
                   <AlternatingTableRow key={row.certId}>
                     <TableCell>
@@ -75,7 +86,9 @@ export function CertifiedGears() {
                     <TableCell>{row.modelName}</TableCell>
                     <TableCell>{row.standard}</TableCell>
                     <TableCell>
-                      <Link href={row.productLink}>Product Link</Link>
+                      <Link href={row.productLink} target="_blank" rel="noopener noreferrer">
+                        Product Link
+                      </Link>
                     </TableCell>
                   </AlternatingTableRow>
                 </>
@@ -97,7 +110,14 @@ const GearDetails = ({ row }: { row: any }) => (
     <DetailLabel label="Product Type" value={row.productType} />
     <DetailLabel label="Model Version" value={row.modelVersion} />
     <DetailLabel label="Release Year" value={row.releaseYear} />
-    <DetailLabel label="Manual Link" value={<Link href={row.manualLink}>Link</Link>} />
+    <DetailLabel
+      label="Manual Link"
+      value={
+        <Link href={row.manualLink} target="_blank" rel="noopener noreferrer">
+          Link
+        </Link>
+      }
+    />
     <DetailLabel label="Testing Laboratory" value={row.testingLaboratory} />
     <DetailLabel label="Test Date" value={row.testDate} />
     <DetailLabel label="Standard Version" value={row.standardVersion} />

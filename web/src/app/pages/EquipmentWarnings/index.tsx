@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import {
+  Box,
   CircularProgress,
   IconButton,
   Link,
@@ -18,12 +19,19 @@ import {
 
 import { listingsApi } from 'app/api/listings-api';
 import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
+import { useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
 export function EquipmentWarnings() {
   const { data, isFetching } = listingsApi.useGetEquipmentWarningsQuery();
   const { InfoDialog, showInfoDialog } = useDetailDialog();
+
+  const { filteredItems, DropdownFilter } = useDropdownFilter({
+    label: 'Product Type',
+    list: data?.map((row) => row.productType),
+    filterer: [data, 'productType'],
+  });
 
   const showDetails = (index: number) => {
     const row = data?.[index];
@@ -36,9 +44,12 @@ export function EquipmentWarnings() {
   };
   return (
     <Stack spacing={2}>
-      <Typography textAlign={'left'} variant="body2Bold">
-        Warnings and recalls for slackline equipment
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography textAlign={'left'} variant="body2Bold">
+          Warnings and recalls for slackline equipment
+        </Typography>
+        <DropdownFilter />
+      </Box>
       <InfoDialog />
       {isFetching ? (
         <CircularProgress />
@@ -60,7 +71,7 @@ export function EquipmentWarnings() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.map((row, index) => (
+              {filteredItems?.map((row, index) => (
                 <>
                   <AlternatingTableRow key={index}>
                     <TableCell>
@@ -97,8 +108,22 @@ const Details = ({ row }: { row: any }) => (
     <DetailLabel label="In Production" value={row.inProduction} />
     <DetailLabel label="Description" value={row.description} />
     <DetailLabel label="Solution" value={row.solution} />
-    <DetailLabel label="Link 1" value={<Link href={row.link1}>Link</Link>} />
-    <DetailLabel label="Link 2" value={<Link href={row.link2}>Link</Link>} />
+    <DetailLabel
+      label="Link 1"
+      value={
+        <Link href={row.link1} target="_blank" rel="noopener noreferrer">
+          Link
+        </Link>
+      }
+    />
+    <DetailLabel
+      label="Link 2"
+      value={
+        <Link href={row.link2} target="_blank" rel="noopener noreferrer">
+          Link
+        </Link>
+      }
+    />
   </Stack>
 );
 

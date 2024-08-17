@@ -6,6 +6,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const googleCredsSSMParameter = 'isa-tools-google-credentials-json';
 const certificatesSpreadsheetId = '1WO8RDDn6WKTmZQX4YK9xNwWfh0-eciIX0fdSvsgNRsA';
 const equipmentWarningsSpreadsheetId = '16cp9iRy1Rs8uOU_UZ9ouJGkhQ_0IiySmF5UNCaorJHM';
+const sairReportSpreadsheetId = '1Z1Lzqj6sazIdZ4gTpQGLKR9woFytu0AqR331iTKkcxs';
 
 let sheets: sheets_v4.Sheets;
 const cache: {
@@ -23,15 +24,28 @@ export const initSpreadsheets = async () => {
 
 export const getSpreadsheetValues = async <T extends string>(
   range: string,
-  spreadsheet: 'certificates' | 'equipment-warnings',
+  spreadsheet: 'certificates' | 'equipment-warnings' | 'sair-reports',
   obj: T[],
 ) => {
   const cachedValue = cache.ranges[range] || [];
   if (cachedValue.length <= 0 || cache.expiresIn < Date.now()) {
     await authorizeSpreadsheet();
 
-    const spreadsheetId =
-      spreadsheet === 'certificates' ? certificatesSpreadsheetId : equipmentWarningsSpreadsheetId;
+    let spreadsheetId: string;
+
+    switch (spreadsheet) {
+      case 'certificates':
+        spreadsheetId = certificatesSpreadsheetId;
+        break;
+      case 'equipment-warnings':
+        spreadsheetId = equipmentWarningsSpreadsheetId;
+        break;
+      case 'sair-reports':
+        spreadsheetId = sairReportSpreadsheetId;
+        break;
+      default:
+        throw new Error('Invalid spreadsheet');
+    }
 
     const result = await sheets.spreadsheets.values.batchGet({
       spreadsheetId: spreadsheetId,
@@ -58,6 +72,9 @@ export const getSpreadsheetValues = async <T extends string>(
       const v: { [key in T]: string | undefined } = {} as any;
       for (let i = 0; i < obj.length; i++) {
         const fieldName = obj[i];
+        if (fieldName === '_') {
+          continue;
+        }
         const rowValue = row[i]?.trim() as string | undefined;
         if (!rowValue) {
           continue;

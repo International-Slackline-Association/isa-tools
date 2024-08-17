@@ -34,6 +34,12 @@ export const homepageItems = [
     subtitle: 'Warnings and recalls for slackline equipment',
     route: '/equipment-warnings',
   },
+  {
+    icon: <WarningIcon />,
+    title: 'Sair Reports',
+    subtitle: 'Accident Reports',
+    route: '/sair-reports',
+  },
   // {
   //   icon: <EmojiEventsIcon />,
   //   title: 'World Records',

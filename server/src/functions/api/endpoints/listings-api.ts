@@ -1,6 +1,7 @@
 import { formatCertificateDate } from 'core/certificates/generators/utils';
 import { certificateSpreadsheet } from 'core/spreadsheets/certificates';
 import { getEquipmentWarnings } from 'core/spreadsheets/equipment-warnings';
+import { getSairReports } from 'core/spreadsheets/sair-reports';
 import express, { Request } from 'express';
 
 import { expressRoute, verifyTrustedDomainRequest } from '../utils';
@@ -76,6 +77,15 @@ export const listEquipmentWarnings = async (req: Request) => {
   return { items };
 };
 
+export const listSairReports = async (req: Request) => {
+  verifyTrustedDomainRequest(req);
+
+  const reports = await getSairReports();
+  const items = reports.sort(sortByField('incidentDate'));
+
+  return { items };
+};
+
 const sortByField = (...fields: string[]) => {
   return (a: any, b: any) => {
     for (const field of fields) {
@@ -91,3 +101,4 @@ listingsApi.get('/instructors', expressRoute(listInstructors));
 listingsApi.get('/riggers', expressRoute(listRiggers));
 listingsApi.get('/approved-gears', expressRoute(listCertifiedGears));
 listingsApi.get('/equipment-warnings', expressRoute(listEquipmentWarnings));
+listingsApi.get('/sair-reports', expressRoute(listSairReports));

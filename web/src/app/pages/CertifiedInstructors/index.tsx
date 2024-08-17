@@ -1,14 +1,7 @@
-import { useMemo, useState } from 'react';
-
 import {
   Box,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
-  SelectChangeEvent,
   Stack,
   Table,
   TableBody,
@@ -22,6 +15,7 @@ import {
 } from '@mui/material';
 
 import { listingsApi } from 'app/api/listings-api';
+import { useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
 
 export const AlternatingTableRow = styled(TableRow)`
   &:nth-of-type(even) {
@@ -31,29 +25,12 @@ export const AlternatingTableRow = styled(TableRow)`
 
 export function CertifiedInstructors() {
   const { data, isFetching } = listingsApi.useGetInstructorsListQuery();
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
 
-  const countryList = useMemo(
-    () =>
-      [
-        ...new Set(
-          data
-            ?.map((row) => row.country)
-            .filter((c) => c)
-            .sort((a, b) => a?.localeCompare(b || '') || 0) || [],
-        ),
-      ] as string[],
-    [data],
-  );
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedCountry(event.target.value as string);
-  };
-
-  const instructors = useMemo(
-    () => data?.filter((row) => row.country === selectedCountry || selectedCountry === ''),
-    [data, selectedCountry],
-  );
+  const { filteredItems, DropdownFilter } = useDropdownFilter({
+    label: 'Country',
+    list: data?.map((row) => row.country),
+    filterer: [data, 'country'],
+  });
 
   return (
     <Stack spacing={2}>
@@ -61,23 +38,7 @@ export function CertifiedInstructors() {
         <Typography textAlign={'left'} variant="body2Bold">
           List of Certified Instructors
         </Typography>
-        <FormControl size="medium" sx={{ minWidth: 120 }}>
-          <InputLabel id="country-select">Country</InputLabel>
-          <Select
-            labelId="country-select"
-            id="country-select"
-            value={selectedCountry}
-            label="Country"
-            variant="outlined"
-            onChange={handleChange}
-          >
-            {countryList.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <DropdownFilter />
       </Box>
       {isFetching ? (
         <CircularProgress />
@@ -98,7 +59,7 @@ export function CertifiedInstructors() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {instructors?.map((row) => (
+              {filteredItems?.map((row) => (
                 <AlternatingTableRow key={row.certId}>
                   <TableCell>
                     <a href={`mailto:${row.email}`}>{row.name?.substring(0, 50)}</a>
