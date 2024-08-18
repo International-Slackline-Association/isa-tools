@@ -33,8 +33,8 @@ export function EquipmentWarnings() {
     filterer: [data, 'productType'],
   });
 
-  const showDetails = (index: number) => {
-    const row = data?.[index];
+  const showDetails = (id?: string) => {
+    const row = data?.find((row) => row.id === id);
     if (row) {
       showInfoDialog({
         title: `${row.manufacturer} - ${row.model}`,
@@ -71,11 +71,11 @@ export function EquipmentWarnings() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredItems?.map((row, index) => (
+              {filteredItems?.map((row) => (
                 <>
-                  <AlternatingTableRow key={index}>
+                  <AlternatingTableRow key={row.id}>
                     <TableCell>
-                      <IconButton size="small" onClick={() => showDetails(index)}>
+                      <IconButton size="small" onClick={() => showDetails(row.id)}>
                         <ZoomInIcon />
                       </IconButton>
                     </TableCell>

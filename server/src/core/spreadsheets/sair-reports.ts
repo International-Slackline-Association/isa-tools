@@ -2,7 +2,7 @@ import { getSpreadsheetValues } from './utils';
 
 export const getSairReports = async () => {
   return getSpreadsheetValues('Processed', 'sair-reports', [
-    '_',
+    'id',
     '_',
     'narrative',
     'analysis',
