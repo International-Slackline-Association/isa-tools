@@ -11,7 +11,6 @@ export const listInstructors = async (req: Request) => {
 
   const instructors = await certificateSpreadsheet.getInstructors();
 
-  // s
   const items = instructors
     .map((i) => ({
       email: i.email,
@@ -81,7 +80,7 @@ export const listSairReports = async (req: Request) => {
   verifyTrustedDomainRequest(req);
 
   const reports = await getSairReports();
-  const items = reports.sort(sortByField('incidentDate'));
+  const items = reports.sort(sortByField('incidentDateParsed')).reverse();
 
   return { items };
 };

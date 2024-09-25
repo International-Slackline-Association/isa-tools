@@ -1,9 +1,11 @@
+import * as dateFns from 'date-fns';
+
 import { getSpreadsheetValues } from './utils';
 
 export const getSairReports = async () => {
-  return getSpreadsheetValues('Processed', 'sair-reports', [
-    'id',
-    '_',
+  return getSpreadsheetValues('Full translated', 'sair-reports', [
+    'language',
+    'timestamp',
     'narrative',
     'analysis',
     'countryName',
@@ -13,9 +15,19 @@ export const getSairReports = async () => {
     'severity',
     'injuryType',
     'injuryLocation',
-    '_',
     'filters',
   ]).then((data) => {
-    return data.filter((d) => Object.keys(d).length > 0);
+    type R = (typeof data)[0] & { incidentDateParsed: Date };
+    return data
+      .filter((d) => Object.keys(d).length > 0)
+      .map<R>((d) => {
+        const parsedDate = dateFns.parse(d.incidentDate!, 'M/dd/yyyy', new Date());
+        const incidentDateFormatted = dateFns.format(parsedDate, 'dd.MM.yyyy');
+        return {
+          ...d,
+          incidentDate: incidentDateFormatted,
+          incidentDateParsed: parsedDate,
+        };
+      });
   });
 };

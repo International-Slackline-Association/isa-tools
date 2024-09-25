@@ -28,7 +28,7 @@ export function SairReports() {
 
   const incidentTypeFilter = useDropdownFilter({
     label: 'Incident Type',
-    list: data?.map((row) => row.incidentType),
+    list: data?.map((row) => row.incidentType?.split(',')).flat(),
     filterer: [data, 'incidentType'],
   });
 
@@ -44,8 +44,8 @@ export function SairReports() {
     filterer: [data, 'filters'],
   });
 
-  const showDetails = (id?: string) => {
-    const row = data?.find((row) => row.id === id);
+  const showDetails = (timestamp?: string) => {
+    const row = data?.find((row) => row.timestamp === timestamp);
     if (row) {
       showInfoDialog({
         title: `Incident Report Details`,
@@ -86,6 +86,7 @@ export function SairReports() {
             <TableHead>
               <TableRow>
                 <TableCell />
+                <TableCell>Language</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Type Of Incident</TableCell>
                 <TableCell>Type of Slackline</TableCell>
@@ -96,13 +97,13 @@ export function SairReports() {
             <TableBody>
               {filteredItems?.map((row) => (
                 <>
-                  <AlternatingTableRow key={row.id}>
+                  <AlternatingTableRow key={row.timestamp}>
                     <TableCell>
-                      <IconButton size="small" onClick={() => showDetails(row.id)}>
+                      <IconButton size="small" onClick={() => showDetails(row.timestamp)}>
                         <ZoomInIcon />
                       </IconButton>
                     </TableCell>
-
+                    <TableCell>{row.language}</TableCell>
                     <TableCell>{row.incidentDate}</TableCell>
                     <TableCell>{row.incidentType}</TableCell>
                     <TableCell>{row.slacklineType}</TableCell>

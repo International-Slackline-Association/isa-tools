@@ -2,7 +2,7 @@ import { getSpreadsheetValues } from './utils';
 
 export const getEquipmentWarnings = async () => {
   return getSpreadsheetValues('Warnings', 'equipment-warnings', [
-    "id",
+    'id',
     'status',
     'date',
     'productType',
