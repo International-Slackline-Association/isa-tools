@@ -27,3 +27,10 @@ export function showInfoNotification(message: string) {
     severity: 'info',
   });
 }
+
+export function convertGoogleDriveImageToUrl(url?: string) {
+  // url format: https://drive.google.com/file/d/XXXX/view?usp=drive_link
+  const id = url?.split('/')[5];
+  const format = `https://lh3.googleusercontent.com/d/${id}`;
+  return format;
+}
