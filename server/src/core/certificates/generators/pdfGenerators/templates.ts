@@ -6,6 +6,7 @@ import CONTEST_ORGANIZER_EN from './templates/contest-organizer-en.pdf';
 import HONORARY_MEMBER_EN from './templates/honorary-member-en.pdf';
 import INSTRUCTOR_EN from './templates/instructor-en.pdf';
 import ISA_MEMBER from './templates/isa-member-en.pdf';
+import ISA_PARTNER from './templates/isa-partner-en.pdf';
 import RIGGER_EN from './templates/rigger-en.pdf';
 import WORLD_RECORD_EN from './templates/world-record-en.pdf';
 
@@ -27,6 +28,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, _language: st
       return HONORARY_MEMBER_EN;
     case 'contest-organizer':
       return CONTEST_ORGANIZER_EN;
+    case 'isa-partnership':
+      return ISA_PARTNER;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }

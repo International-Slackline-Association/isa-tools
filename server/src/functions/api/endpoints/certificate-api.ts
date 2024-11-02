@@ -38,6 +38,7 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
     judge: [],
     'contest-organizer': ['en'],
     'honorary-member': ['en'],
+    'isa-partnership': ['en'],
   };
 
   return { certificates: certs, certificateLanguages };

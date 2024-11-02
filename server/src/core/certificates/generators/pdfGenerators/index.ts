@@ -5,6 +5,7 @@ import * as contestOrganizer from './contest-organizer';
 import * as honoraryMember from './honorary-member';
 import * as instructor from './instructor';
 import * as isaMember from './isa-membership';
+import * as isaPartner from './isa-partnership';
 import * as rigger from './rigger';
 import * as worldRecord from './world-record';
 
@@ -18,4 +19,5 @@ export const pdfGenerators = {
   generateAthleteExellencePDF: athleteExellence.generate,
   generateContestOrganizerPDF: contestOrganizer.generate,
   generateHonoraryMemberPDF: honoraryMember.generate,
+  generateIsaPartnershipPDF: isaPartner.generate,
 };

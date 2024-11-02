@@ -45,6 +45,9 @@ export const generateCertificatePDF = async (
     case 'contest-organizer':
       pdf = await generateContestOrganizer(params);
       break;
+    case 'isa-partnership':
+      pdf = await generateISAPartnership(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -244,6 +247,31 @@ const generateContestOrganizer = async (payload: GenerateCertificatePayload) => 
       location: item.location!,
       date: item.date!,
       discipline: item.discipline!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateISAPartnership = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getISAPartners({ certId: certificateId }))[0];
+
+  const date = formatCertificateDate(item.date!);
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name}" has a ${item.membership} of ISA`,
+  });
+
+  const pdf = await pdfGenerators.generateIsaPartnershipPDF(
+    language,
+    {
+      name: item.name!,
+      date: date.formal!,
+      location: item.location!,
+      membership: item.membership!,
     },
     verificationUrl,
   );

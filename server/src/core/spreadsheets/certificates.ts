@@ -150,6 +150,18 @@ const getApprovedGears = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
+const getISAPartners = async (filterBy: FilterBy = {}) => {
+  return getCertificates('isa-partnership', [
+    'certId',
+    'isaId',
+    'email',
+    'membership',
+    'name',
+    'date',
+    'location',
+  ]).then(filterCertificates(filterBy));
+};
+
 const getAllItems = async (filterBy: FilterBy = {}) => {
   await initSpreadsheets();
 
@@ -216,6 +228,9 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
       addToCertificates('approved-gear', (g) => `Approved Gear: ${g?.brand}`),
     ),
   );
+  promises.push(
+    getISAPartners(filterBy).then(addToCertificates('isa-partnership', () => 'ISA Partnership')),
+  );
 
   await Promise.all(promises);
   return certs;
@@ -269,6 +284,8 @@ const certificateTypeToRange = (certificateType: CertificateType) => {
       return 'Honorary Members';
     case 'approved-gear':
       return 'Approved Gear';
+    case 'isa-partnership':
+      return 'ISA Partnership';
   }
 };
 
@@ -283,5 +300,6 @@ export const certificateSpreadsheet = {
   getWorldRecords,
   getHonoraryMembers,
   getApprovedGears,
+  getISAPartners,
   getAllItems,
 };
