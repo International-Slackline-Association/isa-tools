@@ -86,16 +86,16 @@ export function SairReports() {
             backgroundColor: 'transparent',
           }}
         >
-          <Table>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Language</TableCell>
                 <TableCell>Date</TableCell>
-                <TableCell>Country</TableCell>
+                <TableCell>Language</TableCell>
                 <TableCell>Type Of Incident</TableCell>
                 <TableCell>Type of Slackline</TableCell>
                 <TableCell>Type of Injury</TableCell>
+                <TableCell>Country</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -103,19 +103,21 @@ export function SairReports() {
                 <>
                   <AlternatingTableRow key={row.timestamp}>
                     <TableCell>
-                      <Stack direction="row" spacing={1} alignItems={'center'}>
-                        <IconButton size="small" onClick={() => showDetails(row.timestamp)}>
-                          <ZoomInIcon />
-                        </IconButton>
+                      <IconButton size="small" onClick={() => showDetails(row.timestamp)}>
+                        <ZoomInIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell>{row.incidentDate}</TableCell>
+                    <TableCell width={'5%'}>{row.language}</TableCell>
+                    <TableCell>
+                      <Stack direction={'row'} spacing={1} alignItems={'center'}>
+                        <span>{row.incidentType}</span>
                         <Images images={row.images} isThumbnail={true} />
                       </Stack>
                     </TableCell>
-                    <TableCell>{row.language}</TableCell>
-                    <TableCell>{row.incidentDate}</TableCell>
-                    <TableCell>{row.countryName}</TableCell>
-                    <TableCell>{row.incidentType}</TableCell>
                     <TableCell>{row.slacklineType}</TableCell>
                     <TableCell>{row.injuryType}</TableCell>
+                    <TableCell>{row.countryName}</TableCell>
                   </AlternatingTableRow>
                 </>
               ))}
@@ -148,7 +150,7 @@ const Details = ({ row }: { row: any }) => (
 
 const Images = (props: { images: string[]; isThumbnail: boolean }) => {
   const { images, isThumbnail } = props;
-  const cols = isThumbnail ? 2 : 1;
+  const cols = isThumbnail ? 8 : 1;
   const gap = isThumbnail ? 4 : 12;
   const width = isThumbnail ? '10px' : '100%';
   const height = isThumbnail ? '10px' : 'auto';

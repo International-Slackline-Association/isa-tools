@@ -17,6 +17,7 @@ export const DropdownFilter = (props: Props) => {
         value={props.selectedValue}
         label={props.label}
         variant="outlined"
+        size="small"
         onChange={(e) => props.onSelected(e.target.value as string)}
       >
         {props.values.map((v) => (
