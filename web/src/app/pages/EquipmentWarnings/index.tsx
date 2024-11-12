@@ -19,7 +19,7 @@ import {
 
 import { listingsApi } from 'app/api/listings-api';
 import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
-import { useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
+import { intersectAll, useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
@@ -27,11 +27,22 @@ export function EquipmentWarnings() {
   const { data, isFetching } = listingsApi.useGetEquipmentWarningsQuery();
   const { InfoDialog, showInfoDialog } = useDetailDialog();
 
-  const { filteredItems, DropdownFilter } = useDropdownFilter({
+  const productTypeFilter = useDropdownFilter({
     label: 'Product Type',
     list: data?.map((row) => row.productType),
     filterer: [data, 'productType'],
   });
+
+  const manufacturerFilter = useDropdownFilter({
+    label: 'Manufacturer',
+    list: data?.map((row) => row.manufacturer),
+    filterer: [data, 'manufacturer'],
+  });
+
+  const filteredItems = intersectAll(
+    productTypeFilter.filteredItems,
+    manufacturerFilter.filteredItems,
+  );
 
   const showDetails = (id?: string) => {
     const row = data?.find((row) => row.id === id);
@@ -48,7 +59,10 @@ export function EquipmentWarnings() {
         <Typography textAlign={'left'} variant="body2Bold">
           Warnings and recalls for slackline equipment
         </Typography>
-        <DropdownFilter />
+        <Stack direction="row" spacing={1}>
+          <productTypeFilter.DropdownFilter />
+          <manufacturerFilter.DropdownFilter />
+        </Stack>
       </Box>
       <InfoDialog />
       {isFetching ? (
@@ -104,6 +118,9 @@ export function EquipmentWarnings() {
 
 const Details = ({ row }: { row: any }) => (
   <Stack spacing={2} sx={{}}>
+    {row.productImage && (
+      <img src={row.productImage} alt="Product Image" style={{ width: '100%' }} />
+    )}
     <DetailLabel label="Date" value={row.date} />
     <DetailLabel label="In Production" value={row.inProduction} />
     <DetailLabel label="Description" value={row.description} />

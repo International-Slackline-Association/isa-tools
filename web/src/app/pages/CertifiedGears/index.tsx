@@ -19,7 +19,7 @@ import {
 
 import { listingsApi } from 'app/api/listings-api';
 import { useDetailDialog } from 'app/components/Dialogs/useDetailDialog';
-import { useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
+import { intersectAll, useDropdownFilter } from 'app/components/DropdownFilter/useDropdownFilter';
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
@@ -27,10 +27,16 @@ export function CertifiedGears() {
   const { data, isFetching } = listingsApi.useGetCertifiedGearsQuery();
   const { InfoDialog, showInfoDialog } = useDetailDialog();
 
-  const { filteredItems, DropdownFilter } = useDropdownFilter({
+  const productTypeFilter = useDropdownFilter({
     label: 'Product Type',
     list: data?.map((row) => row.productType),
     filterer: [data, 'productType'],
+  });
+
+  const brandFilter = useDropdownFilter({
+    label: 'Brand',
+    list: data?.map((row) => row.brand),
+    filterer: [data, 'brand'],
   });
 
   const showDetails = (index: number) => {
@@ -42,14 +48,17 @@ export function CertifiedGears() {
       });
     }
   };
-
+  const filteredItems = intersectAll(productTypeFilter.filteredItems, brandFilter.filteredItems);
   return (
     <Stack spacing={2}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography textAlign={'left'} variant="body2Bold">
           List of Certified Gear
         </Typography>
-        <DropdownFilter />
+        <Stack direction="row" spacing={1}>
+          <productTypeFilter.DropdownFilter />
+          <brandFilter.DropdownFilter />
+        </Stack>
       </Box>
       <InfoDialog />
       {isFetching ? (

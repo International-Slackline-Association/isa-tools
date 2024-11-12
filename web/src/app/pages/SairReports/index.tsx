@@ -91,10 +91,10 @@ export function SairReports() {
               <TableRow>
                 <TableCell />
                 <TableCell>Date</TableCell>
-                <TableCell>Language</TableCell>
+                <TableCell>Type of Injury</TableCell>
+                <TableCell>Location of Injury</TableCell>
                 <TableCell>Type Of Incident</TableCell>
                 <TableCell>Type of Slackline</TableCell>
-                <TableCell>Type of Injury</TableCell>
                 <TableCell>Country</TableCell>
               </TableRow>
             </TableHead>
@@ -108,15 +108,15 @@ export function SairReports() {
                       </IconButton>
                     </TableCell>
                     <TableCell>{row.incidentDate}</TableCell>
-                    <TableCell width={'5%'}>{row.language}</TableCell>
-                    <TableCell>
+                    <TableCell width={'20%'}>
                       <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                        <span>{row.incidentType}</span>
+                        <span>{row.injuryType}</span>
                         <Images images={row.images} isThumbnail={true} />
                       </Stack>
                     </TableCell>
+                    <TableCell width={'20%'}>{row.injuryLocation}</TableCell>
+                    <TableCell width={'20%'}>{row.incidentType}</TableCell>
                     <TableCell>{row.slacklineType}</TableCell>
-                    <TableCell>{row.injuryType}</TableCell>
                     <TableCell>{row.countryName}</TableCell>
                   </AlternatingTableRow>
                 </>
