@@ -66,16 +66,11 @@ export function SairReports() {
 
   return (
     <Stack spacing={2}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography textAlign={'left'} variant="body2Bold">
-          Sair Reports
-        </Typography>
-        <Stack direction="row" spacing={1}>
-          <incidentTypeFilter.DropdownFilter />
-          <slacklineTypeFilter.DropdownFilter />
-          <moreFilter.DropdownFilter />
-        </Stack>
-      </Box>
+      <Stack direction="row" spacing={1} alignSelf={'flex-end'}>
+        <incidentTypeFilter.DropdownFilter />
+        <slacklineTypeFilter.DropdownFilter />
+        <moreFilter.DropdownFilter />
+      </Stack>
       <InfoDialog />
       {isFetching ? (
         <CircularProgress />
@@ -100,26 +95,24 @@ export function SairReports() {
             </TableHead>
             <TableBody>
               {filteredItems?.map((row) => (
-                <>
-                  <AlternatingTableRow key={row.timestamp}>
-                    <TableCell>
+                <AlternatingTableRow key={row.timestamp}>
+                  <TableCell>
+                    <Stack spacing={1} alignItems={'center'}>
                       <IconButton size="small" onClick={() => showDetails(row.timestamp)}>
                         <ZoomInIcon />
                       </IconButton>
-                    </TableCell>
-                    <TableCell>{row.incidentDate}</TableCell>
-                    <TableCell width={'20%'}>
-                      <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                        <span>{row.injuryType}</span>
-                        <Images images={row.images} isThumbnail={true} />
-                      </Stack>
-                    </TableCell>
-                    <TableCell width={'20%'}>{row.injuryLocation}</TableCell>
-                    <TableCell width={'20%'}>{row.incidentType}</TableCell>
-                    <TableCell>{row.slacklineType}</TableCell>
-                    <TableCell>{row.countryName}</TableCell>
-                  </AlternatingTableRow>
-                </>
+                      {row.images.length > 0 && (
+                        <img src="/images/images-placeholder.svg" style={{ width: '16px' }} />
+                      )}
+                    </Stack>
+                  </TableCell>
+                  <TableCell>{row.incidentDate}</TableCell>
+                  <TableCell width={'20%'}>{row.injuryType}</TableCell>
+                  <TableCell width={'20%'}>{row.injuryLocation}</TableCell>
+                  <TableCell width={'20%'}>{row.incidentType}</TableCell>
+                  <TableCell>{row.slacklineType}</TableCell>
+                  <TableCell>{row.countryName}</TableCell>
+                </AlternatingTableRow>
               ))}
             </TableBody>
           </Table>

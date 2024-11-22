@@ -11,10 +11,11 @@ interface Props<T, K extends keyof T> {
 export const useDropdownFilter = <T, K extends keyof T>(props: Props<T, K>) => {
   const [selectedValue, setSelectedValue] = useState<string>('All');
 
-  const values = [
-    'All',
-    ...new Set(props.list?.filter((c) => c).sort((a, b) => a?.localeCompare(b || '') || 0) || []),
-  ] as string[];
+  const values = useMemo(() => {
+    const trimmedList = (props.list?.map((item) => item?.trim()).filter((c) => c) ||
+      []) as string[];
+    return ['All', ...new Set(trimmedList.sort((a, b) => a?.localeCompare(b || '') || 0) || [])];
+  }, [props.list]);
 
   const itemsToFilter = props.filterer[0];
   const filterKey = props.filterer[1];
