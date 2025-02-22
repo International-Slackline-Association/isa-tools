@@ -1,5 +1,6 @@
 import { CertificateType } from 'core/spreadsheets/types';
 
+import APPROVED_GEAR_EN from './templates/approved-gear-en.pdf';
 import ATHLETE_EXCELLENCE from './templates/athlete-excellence-en.pdf';
 import ATHLETIC_AWARD_EN from './templates/athletic-award-en.pdf';
 import CONTEST_ORGANIZER_EN from './templates/contest-organizer-en.pdf';
@@ -30,6 +31,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, _language: st
       return CONTEST_ORGANIZER_EN;
     case 'isa-partnership':
       return ISA_PARTNER;
+    case 'approved-gear':
+      return APPROVED_GEAR_EN;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }

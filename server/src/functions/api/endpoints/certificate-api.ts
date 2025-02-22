@@ -34,7 +34,7 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
     'athlete-excellence': ['en'],
     'isa-membership': ['en'],
     'world-record': ['en'],
-    'approved-gear': [],
+    'approved-gear': ['en'],
     judge: [],
     'contest-organizer': ['en'],
     'honorary-member': ['en'],

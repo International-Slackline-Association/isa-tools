@@ -1,4 +1,5 @@
 // import * as approvedGear from './approved-gear';
+import * as approvedGear from './approved-gear';
 import * as athleteExellence from './athlete-excellence';
 import * as athleticAward from './athletic-award';
 import * as contestOrganizer from './contest-organizer';
@@ -14,7 +15,7 @@ export const pdfGenerators = {
   generateRiggerPDF: rigger.generate,
   generateAthleticAwardPDF: athleticAward.generate,
   generateIsaMembershipPDF: isaMember.generate,
-  // generateApprovedGearPDF: approvedGear.generate,
+  generateApprovedGearPDF: approvedGear.generate,
   generateWorldRecordPDF: worldRecord.generate,
   generateAthleteExellencePDF: athleteExellence.generate,
   generateContestOrganizerPDF: contestOrganizer.generate,

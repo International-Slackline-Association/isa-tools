@@ -48,6 +48,9 @@ export const generateCertificatePDF = async (
     case 'isa-partnership':
       pdf = await generateISAPartnership(params);
       break;
+    case 'approved-gear':
+      pdf = await generateApprovedGear(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -272,6 +275,36 @@ const generateISAPartnership = async (payload: GenerateCertificatePayload) => {
       date: date.formal!,
       location: item.location!,
       membership: item.membership!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateApprovedGear = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getApprovedGears({ certId: certificateId }))[0];
+
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.brand}" has a ISA certified gear for "${item.modelName}"`,
+  });
+
+  const pdf = await pdfGenerators.generateApprovedGearPDF(
+    language,
+    {
+      brand: item.brand!,
+      manualLink: item.manualLink!,
+      modelName: item.modelName!,
+      modelVersion: item.modelVersion!,
+      productLink: item.productLink!,
+      releaseYear: item.releaseYear!,
+      productType: item.productType!,
+      standard: item.standard!,
+      standardVersion: item.standardVersion!,
+      testingLab: item.testingLaboratory!,
+      testDate: item.testDate!,
     },
     verificationUrl,
   );
