@@ -9,6 +9,7 @@ import INSTRUCTOR_EN from './templates/instructor-en.pdf';
 import ISA_MEMBER from './templates/isa-member-en.pdf';
 import ISA_PARTNER from './templates/isa-partner-en.pdf';
 import RIGGER_EN from './templates/rigger-en.pdf';
+import WORLD_FIRST_EN from './templates/world-first-en.pdf';
 import WORLD_RECORD_EN from './templates/world-record-en.pdf';
 
 export const blankPDFTemplate = (certificateType: CertificateType, _language: string) => {
@@ -33,6 +34,8 @@ export const blankPDFTemplate = (certificateType: CertificateType, _language: st
       return ISA_PARTNER;
     case 'approved-gear':
       return APPROVED_GEAR_EN;
+    case 'world-first':
+      return WORLD_FIRST_EN;
     default:
       throw new Error(`Cannot find pdf template for certificate type ${certificateType}`);
   }

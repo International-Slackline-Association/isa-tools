@@ -51,6 +51,9 @@ export const generateCertificatePDF = async (
     case 'approved-gear':
       pdf = await generateApprovedGear(params);
       break;
+    case 'world-first':
+      pdf = await generateWorldFirst(params);
+      break;
     default:
       throw new Error('Invalid certificate to genereate PDF ');
   }
@@ -305,6 +308,30 @@ const generateApprovedGear = async (payload: GenerateCertificatePayload) => {
       standardVersion: item.standardVersion!,
       testingLab: item.testingLaboratory!,
       testDate: item.testDate!,
+    },
+    verificationUrl,
+  );
+  return pdf;
+};
+
+const generateWorldFirst = async (payload: GenerateCertificatePayload) => {
+  const { certificateId, subject, language, skipQRCode } = payload;
+  const item = (await certificateSpreadsheet.getWorldFirsts({ certId: certificateId }))[0];
+
+  const date = formatCertificateDate(item.date!);
+  const { verificationUrl } = await signCertificate({
+    subject,
+    skipQRCode,
+    content: `"${item.name}" has a valid WORLD FIRST certificate for "${item.category}" achieved on ${date.pretty}`,
+  });
+
+  const pdf = await pdfGenerators.generateWorldFirstPDF(
+    language,
+    {
+      name: item.name!,
+      specs: item.specs!,
+      date: date.formal,
+      description: item.description!,
     },
     verificationUrl,
   );

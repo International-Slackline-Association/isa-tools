@@ -8,6 +8,7 @@ import * as instructor from './instructor';
 import * as isaMember from './isa-membership';
 import * as isaPartner from './isa-partnership';
 import * as rigger from './rigger';
+import * as worldFirst from './world-first';
 import * as worldRecord from './world-record';
 
 export const pdfGenerators = {
@@ -21,4 +22,5 @@ export const pdfGenerators = {
   generateContestOrganizerPDF: contestOrganizer.generate,
   generateHonoraryMemberPDF: honoraryMember.generate,
   generateIsaPartnershipPDF: isaPartner.generate,
+  generateWorldFirstPDF: worldFirst.generate,
 };

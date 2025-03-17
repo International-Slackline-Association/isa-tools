@@ -39,6 +39,7 @@ const listCertificates = async (req: Request<any, any, any, ListCertificatesQuer
     'contest-organizer': ['en'],
     'honorary-member': ['en'],
     'isa-partnership': ['en'],
+    'world-first': ['en'],
   };
 
   return { certificates: certs, certificateLanguages };

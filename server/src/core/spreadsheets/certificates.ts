@@ -123,6 +123,19 @@ const getWorldRecords = async (filterBy: FilterBy = {}) => {
   ]).then(filterCertificates(filterBy));
 };
 
+const getWorldFirsts = async (filterBy: FilterBy = {}) => {
+  return getCertificates('world-first', [
+    'certId',
+    'isaId',
+    'email',
+    'description',
+    'specs',
+    'name',
+    'category',
+    'date',
+  ]).then(filterCertificates(filterBy));
+};
+
 const getHonoraryMembers = async (filterBy: FilterBy = {}) => {
   return getCertificates('honorary-member', ['certId', 'isaId', 'email', 'name', 'date']).then(
     filterCertificates(filterBy),
@@ -232,6 +245,12 @@ const getAllItems = async (filterBy: FilterBy = {}) => {
     getISAPartners(filterBy).then(addToCertificates('isa-partnership', () => 'ISA Partnership')),
   );
 
+  promises.push(
+    getWorldFirsts(filterBy).then(
+      addToCertificates('world-first', (w) => `World First: ${w?.specs}`),
+    ),
+  );
+
   await Promise.all(promises);
   return certs;
 };
@@ -286,6 +305,8 @@ const certificateTypeToRange = (certificateType: CertificateType) => {
       return 'Approved Gear';
     case 'isa-partnership':
       return 'ISA Partnership';
+    case 'world-first':
+      return 'World Firsts';
   }
 };
 
@@ -302,4 +323,5 @@ export const certificateSpreadsheet = {
   getApprovedGears,
   getISAPartners,
   getAllItems,
+  getWorldFirsts,
 };

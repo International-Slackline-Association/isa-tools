@@ -9,4 +9,5 @@ export type CertificateType =
   | 'world-record'
   | 'honorary-member'
   | 'approved-gear'
-  | 'isa-partnership';
+  | 'isa-partnership'
+  | 'world-first';
