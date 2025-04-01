@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import BuildIcon from '@mui/icons-material/Build';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import RedeemIcon from '@mui/icons-material/Redeem';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -40,13 +41,13 @@ export const homepageItems = [
     subtitle: 'Accident Reports',
     route: '/sair-reports',
   },
-  // {
-  //   icon: <EmojiEventsIcon />,
-  //   title: 'World Records',
-  //   subtitle: 'ISA recognized world records',
-  //   route: '/world-records',
-  //   disabled: true,
-  // },
+  {
+    icon: <EmojiEventsIcon />,
+    title: 'World Records',
+    subtitle: 'ISA recognized world records',
+    route: '/world-records',
+    disabled: true,
+  },
   {
     icon: <QrCode2Icon />,
     title: 'Verify',

@@ -120,6 +120,10 @@ const getWorldRecords = async (filterBy: FilterBy = {}) => {
     'name',
     'category',
     'date',
+    'country',
+    'typeOfRecord',
+    'extra',
+    'typeOfLine',
   ]).then(filterCertificates(filterBy));
 };
 
@@ -133,6 +137,12 @@ const getWorldFirsts = async (filterBy: FilterBy = {}) => {
     'name',
     'category',
     'date',
+    'country',
+    'typeOfRecord',
+    'extra',
+    'typeOfLine',
+    'link1',
+    'link2',
   ]).then(filterCertificates(filterBy));
 };
 

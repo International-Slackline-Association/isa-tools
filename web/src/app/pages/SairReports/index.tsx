@@ -3,7 +3,6 @@ import { ReactNode } from 'react';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import {
   Avatar,
-  Box,
   CircularProgress,
   IconButton,
   ImageList,

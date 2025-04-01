@@ -20,6 +20,7 @@ import { Homepage } from './pages/Homepage';
 import { SairReports } from './pages/SairReports/Loadable';
 import { Verify } from './pages/Verify';
 import { Verify as VerifyAsync } from './pages/Verify/Loadable';
+import { WorldRecords } from './pages/WorldRecords/Loadable';
 
 function DocsApp() {
   return (
@@ -32,6 +33,7 @@ function DocsApp() {
           <Route path="/certified-gears" element={<CertifiedGears />} />
           <Route path="/equipment-warnings" element={<EquipmentWarnings />} />
           <Route path="/sair-reports" element={<SairReports />} />
+          <Route path="/world-records" element={<WorldRecords />} />
           <Route path="/verify" element={<VerifyAsync />} />
           <Route path="*" element={<Homepage />} />
         </Routes>

@@ -4,6 +4,8 @@ import {
   listInstructors,
   listRiggers,
   listSairReports,
+  listWorldFirsts,
+  listWorldRecords,
 } from '@server/functions/api/endpoints/listings-api';
 import { baseApi } from 'store/rtk-query';
 import { AsyncReturnType } from 'type-fest';
@@ -54,6 +56,22 @@ export const listingsApi = baseApi
           url: `sheets/list/sair-reports`,
         }),
         transformResponse: (response: AsyncReturnType<typeof listSairReports>) => {
+          return response.items;
+        },
+      }),
+      getWorldRecords: builder.query<AsyncReturnType<typeof listWorldRecords>['items'], void>({
+        query: () => ({
+          url: `sheets/list/world-records`,
+        }),
+        transformResponse: (response: AsyncReturnType<typeof listWorldRecords>) => {
+          return response.items;
+        },
+      }),
+      getWorldFirsts: builder.query<AsyncReturnType<typeof listWorldFirsts>['items'], void>({
+        query: () => ({
+          url: `sheets/list/world-firsts`,
+        }),
+        transformResponse: (response: AsyncReturnType<typeof listWorldFirsts>) => {
           return response.items;
         },
       }),

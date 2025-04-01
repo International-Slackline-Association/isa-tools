@@ -85,6 +85,40 @@ export const listSairReports = async (req: Request) => {
   return { items };
 };
 
+export const listWorldRecords = async (req: Request) => {
+  verifyTrustedDomainRequest(req);
+
+  const worldRecords = await certificateSpreadsheet.getWorldRecords();
+
+  const items = worldRecords
+    .map((i) => {
+      const { isaId, email, date, ...rest } = i;
+      const dateParsed = formatCertificateDate(date, 'dd.MM.yyyy', { safeParse: true }).date;
+      return { ...rest, dateParsed, date: date || 'Unknown' };
+    })
+    .sort(sortByField('dateParsed'))
+    .reverse();
+
+  return { items };
+};
+
+export const listWorldFirsts = async (req: Request) => {
+  verifyTrustedDomainRequest(req);
+
+  const worldFirsts = await certificateSpreadsheet.getWorldFirsts();
+
+  const items = worldFirsts
+    .map((i) => {
+      const { isaId, email, date, ...rest } = i;
+      const dateObj = formatCertificateDate(date, undefined, { safeParse: true }).date;
+      return { ...rest, date: dateObj };
+    })
+    .sort(sortByField('date'))
+    .reverse();
+
+  return { items };
+};
+
 const sortByField = (...fields: string[]) => {
   return (a: any, b: any) => {
     for (const field of fields) {
@@ -101,3 +135,5 @@ listingsApi.get('/riggers', expressRoute(listRiggers));
 listingsApi.get('/approved-gears', expressRoute(listCertifiedGears));
 listingsApi.get('/equipment-warnings', expressRoute(listEquipmentWarnings));
 listingsApi.get('/sair-reports', expressRoute(listSairReports));
+listingsApi.get('/world-records', expressRoute(listWorldRecords));
+listingsApi.get('/world-firsts', expressRoute(listWorldFirsts));
