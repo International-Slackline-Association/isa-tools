@@ -46,7 +46,12 @@ export const homepageItems = [
     title: 'World Records',
     subtitle: 'ISA recognized world records',
     route: '/world-records',
-    disabled: true,
+  },
+  {
+    icon: <EmojiEventsIcon />,
+    title: 'World Firsts',
+    subtitle: 'ISA recognized world firsts',
+    route: '/world-firsts',
   },
   {
     icon: <QrCode2Icon />,

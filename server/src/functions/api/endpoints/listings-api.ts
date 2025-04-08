@@ -110,10 +110,10 @@ export const listWorldFirsts = async (req: Request) => {
   const items = worldFirsts
     .map((i) => {
       const { isaId, email, date, ...rest } = i;
-      const dateObj = formatCertificateDate(date, undefined, { safeParse: true }).date;
-      return { ...rest, date: dateObj };
+      const dateParsed = formatCertificateDate(date, 'dd.MM.yyyy', { safeParse: true }).date;
+      return { ...rest, dateParsed, date: date || 'Unknown' };
     })
-    .sort(sortByField('date'))
+    .sort(sortByField('dateParsed'))
     .reverse();
 
   return { items };

@@ -124,6 +124,8 @@ const getWorldRecords = async (filterBy: FilterBy = {}) => {
     'typeOfRecord',
     'extra',
     'typeOfLine',
+    'link1',
+    'link2',
   ]).then(filterCertificates(filterBy));
 };
 

@@ -16,11 +16,11 @@ import { intersectAll, useDropdownFilter } from 'app/components/DropdownFilter/u
 
 import { AlternatingTableRow } from '../CertifiedInstructors';
 
-export function WorldRecords() {
-  const { data, isFetching } = listingsApi.useGetWorldRecordsQuery();
+export function WorldFirsts() {
+  const { data, isFetching } = listingsApi.useGetWorldFirstsQuery();
 
-  const genderFilter = useDropdownFilter({
-    label: 'Gender',
+  const categoryFilter = useDropdownFilter({
+    label: 'Category',
     list: data?.map((row) => row.category),
     filterer: [data, 'category'],
   });
@@ -31,16 +31,16 @@ export function WorldRecords() {
     filterer: [data, 'country'],
   });
 
-  const extraFilter = useDropdownFilter({
-    label: 'Extra',
-    list: data?.map((row) => row.extra),
-    filterer: [data, 'extra'],
-  });
-
   const typeOfRecordFilter = useDropdownFilter({
     label: 'Type of Record',
     list: data?.map((row) => row.typeOfRecord),
     filterer: [data, 'typeOfRecord'],
+  });
+
+  const extraFilter = useDropdownFilter({
+    label: 'Extra',
+    list: data?.map((row) => row.extra),
+    filterer: [data, 'extra'],
   });
 
   const typeOfLineFilter = useDropdownFilter({
@@ -50,20 +50,20 @@ export function WorldRecords() {
   });
 
   const filteredItems = intersectAll(
-    genderFilter.filteredItems,
+    categoryFilter.filteredItems,
     countryFilter.filteredItems,
-    extraFilter.filteredItems,
     typeOfRecordFilter.filteredItems,
+    extraFilter.filteredItems,
     typeOfLineFilter.filteredItems,
   );
 
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1} alignSelf={'flex-end'}>
-        <genderFilter.DropdownFilter />
+        <categoryFilter.DropdownFilter />
         <countryFilter.DropdownFilter />
-        <extraFilter.DropdownFilter />
         <typeOfRecordFilter.DropdownFilter />
+        <extraFilter.DropdownFilter />
         <typeOfLineFilter.DropdownFilter />
       </Stack>
       {isFetching ? (
@@ -79,7 +79,7 @@ export function WorldRecords() {
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>
-                <TableCell>Record</TableCell>
+                <TableCell>Description</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Country</TableCell>
                 <TableCell>Specs</TableCell>
@@ -90,7 +90,7 @@ export function WorldRecords() {
               {filteredItems?.map((row) => (
                 <AlternatingTableRow key={row.certId}>
                   <TableCell>{row.date}</TableCell>
-                  <TableCell width={'30%'}>{row.recordType}</TableCell>
+                  <TableCell width={'30%'}>{row.description}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.country}</TableCell>
                   <TableCell>{row.specs}</TableCell>
