@@ -31,18 +31,6 @@ export function WorldFirsts() {
     filterer: [data, 'country'],
   });
 
-  const typeOfRecordFilter = useDropdownFilter({
-    label: 'Type of Record',
-    list: data?.map((row) => row.typeOfRecord),
-    filterer: [data, 'typeOfRecord'],
-  });
-
-  const extraFilter = useDropdownFilter({
-    label: 'Extra',
-    list: data?.map((row) => row.extra),
-    filterer: [data, 'extra'],
-  });
-
   const typeOfLineFilter = useDropdownFilter({
     label: 'Type of Line',
     list: data?.map((row) => row.typeOfLine),
@@ -52,8 +40,6 @@ export function WorldFirsts() {
   const filteredItems = intersectAll(
     categoryFilter.filteredItems,
     countryFilter.filteredItems,
-    typeOfRecordFilter.filteredItems,
-    extraFilter.filteredItems,
     typeOfLineFilter.filteredItems,
   );
 
@@ -62,8 +48,6 @@ export function WorldFirsts() {
       <Stack direction="row" spacing={1} alignSelf={'flex-end'}>
         <categoryFilter.DropdownFilter />
         <countryFilter.DropdownFilter />
-        <typeOfRecordFilter.DropdownFilter />
-        <extraFilter.DropdownFilter />
         <typeOfLineFilter.DropdownFilter />
       </Stack>
       {isFetching ? (
@@ -82,7 +66,6 @@ export function WorldFirsts() {
                 <TableCell>Description</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Country</TableCell>
-                <TableCell>Specs</TableCell>
                 <TableCell>Links</TableCell>
               </TableRow>
             </TableHead>
@@ -93,7 +76,6 @@ export function WorldFirsts() {
                   <TableCell width={'30%'}>{row.description}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.country}</TableCell>
-                  <TableCell>{row.specs}</TableCell>
                   <TableCell>
                     {row.link1 && (
                       <Link href={row.link1} target="_blank" rel="noopener noreferrer">
