@@ -23,12 +23,12 @@ export const useDropdownFilter = <T, K extends keyof T>(props: Props<T, K>) => {
   const filteredItems = useMemo(
     () =>
       itemsToFilter?.filter((p) => {
+        if (selectedValue === 'All') return true;
         const v = p[filterKey];
         if (typeof v === 'string') {
-          return v.includes(selectedValue) || selectedValue === 'All';
-        } else {
-          return v === selectedValue || selectedValue === 'All';
+          return v.trim() === selectedValue;
         }
+        return v === selectedValue;
       }),
     [itemsToFilter, selectedValue, filterKey],
   );

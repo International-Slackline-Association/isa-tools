@@ -39,8 +39,8 @@ export function CertifiedGears() {
     filterer: [data, 'brand'],
   });
 
-  const showDetails = (index: number) => {
-    const row = data?.[index];
+  const showDetails = (certId: string | undefined) => {
+    const row = data?.find((row) => row.certId === certId);
     if (row) {
       showInfoDialog({
         title: `${row.brand} - ${row.modelName}`,
@@ -81,11 +81,11 @@ export function CertifiedGears() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredItems?.map((row, index) => (
+              {filteredItems?.map((row) => (
                 <>
                   <AlternatingTableRow key={row.certId}>
                     <TableCell>
-                      <IconButton size="small" onClick={() => showDetails(index)}>
+                      <IconButton size="small" onClick={() => showDetails(row.certId)}>
                         <ZoomInIcon />
                       </IconButton>
                     </TableCell>
