@@ -10,7 +10,8 @@
     "deploy:api": "serverless deploy function -f api",
     "deploy:imageProcessorApi": "serverless deploy function -f imageProcessorApi",
     "deploy:prerender": "aws cloudformation deploy --template-file misc/prerender-cloudformation.yaml --stack-name Prerender --capabilities CAPABILITY_IAM --region=us-east-1 --parameter-overrides PrerenderToken=fE4XxQzGelPlja0KVTna",
-    "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose"
+    "invoke:certificateTester": "serverless invoke local -f certificateTester --verbose",
+    "build:certificate-templates": "node src/core/certificates/generators/pdfGenerators/templates/source/build.mjs"
   },
   "engines": {
     "node": ">=20",
@@ -48,6 +49,7 @@
     "@types/node": "20.10.5",
     "@types/qrcode": "1.5.5",
     "esbuild": "0.19.10",
+    "puppeteer-core": "23.11.1",
     "serverless": "3.38.0",
     "serverless-esbuild": "1.50.1",
     "serverless-plugin-log-subscription": "2.2.0",
